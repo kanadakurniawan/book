@@ -1,26 +1,48 @@
-# book/ — "Pengantar Deep Learning untuk Meteorologi"
+# Pengantar Deep Learning untuk Meteorologi
 
-Buku open-source berbahasa Indonesia. Setiap **bab = satu artikel** yang:
-1. Ditulis sebagai Markdown (master) di `manuscripts/`.
-2. Diberi **DOI Zenodo** (arsip versi PDF+DOCX di `releases/`).
-3. Di-sinkronkan ke blog (`site/src/content/posts/`) agar versi "live" selalu aktual.
+> **"Deep learning untuk meteorologi, dari praktisi untuk praktisi di Indonesia."**
 
-## Struktur
+Buku pengenalan open-source berbahasa Indonesia yang ditulis oleh **Kanada Kurniawan** —
+Meteorology Officer di BMKG (Stasiun Meteorologi Kelas III Maritim Dwikora, Pontianak) dengan
+latar riset pengembangan model neural network untuk prediksi cuaca, pasang surut, dan
+hidrologi.
+
+Ini adalah materi **pengenalan**, bukan hasil riset baru. Gagasannya sederhana: banyak
+praktisi dan mahasiswa kebumian ingin belajar deep learning, tetapi materi yang beredar
+terlalu berorientasi ilmu komputer dan jauh dari konteks data Indonesia. Buku ini hadir
+untuk mengisi celah itu — dengan contoh data lokal dan bahasa yang bisa dipahami.
+
+## Konsep
+
+Setiap **bab adalah satu artikel** yang:
+
+1. Ditulis sebagai **Markdown (master)** di `manuscripts/` — satu-satunya sumber kebenaran isi.
+2. Diberi **DOI Zenodo** per rilis (PDF+DOCX diarsipkan di `releases/`), sehingga setiap bab
+   dapat dikutip dengan stabil seperti publikasi.
+3. Di-sinkronkan ke blog agar versi "live" selalu aktual:
+   ```
+   node build/sync-to-blog.mjs
+   ```
+
+Pendekatan "buku yang hidup" ini memungkinkan materi terus diperbarui tanpa memutus tautan
+sitasi — versi baru naik di Zenodo, concept DOI tetap sama.
+
+## Struktur Repositori
 
 ```
 book/
 ├── manuscripts/
 │   └── ch-01-pengantar-neuron/
-│       ├── master.md        # MASTER: satu-satunya sumber kebenaran isi bab
-│       └── refs.bib         # referensi IEEE (optional, dipakai saat PDF build)
+│       ├── master.md        # MASTER: sumber kebenaran isi bab
+│       └── refs.bib         # referensi (dipakai saat PDF build via citeproc)
 ├── releases/
-│   └── v1.0.0/              # snapshot tiap rilis (PDF+DOCX) → dipakai untuk Zenodo
+│   └── v1.0.0/              # snapshot tiap rilis (PDF+DOCX) → untuk Zenodo
 └── build/
-    ├── generate.mjs         # generate PDF+DOCX per bab (butuh pandoc + LaTeX utk PDF)
-    └── sync-to-blog.mjs     # sinkronkan master → blog Astro
+    ├── generate.mjs         # master.md → PDF + DOCX per versi
+    └── sync-to-blog.mjs     # sinkronkan master → blog (site/src/content/posts)
 ```
 
-## Frontmatter master.md
+## Frontmatter `master.md`
 
 | Field | Kegunaan |
 |---|---|
@@ -33,15 +55,15 @@ book/
 | `status` | `draft` (belum live) atau `published` |
 | `chapter` | Nomor bab |
 
-## Alur Kerja
+## Alur Kerja Rilis Satu Bab
 
-1. Buat `manuscripts/ch-0N-<slug>/master.md`.
-2. Message check: pastikan YAML frontmatter lengkap.
+1. Tulis `manuscripts/ch-0N-<slug>/master.md` lengkap dengan frontmatter.
+2. Review isi dengan teliti (beberapa putaran) sebelum dirilis.
 3. Generate rilis:
    ```
    node build/generate.mjs --version v1.0.0
    ```
-4. Unggah `releases/v1.0.0/` ke Zenodo → copy DOI ke frontmatter.
+4. Unggah `releases/v1.0.0/` ke Zenodo → salin DOI ke frontmatter.
 5. Sinkronkan ke blog:
    ```
    node build/sync-to-blog.mjs
@@ -50,7 +72,17 @@ book/
 
 ## Prasyarat
 
-- **Pandoc** (wajib untuk PDF/DOCX): https://pandoc.org
-- **LaTeX** (wajib hanya untuk output PDF; DOCX tidak butuh): mis. TinyTeX.
+- **Pandoc** (wajib untuk output PDF/DOCX): https://pandoc.org
+- **LaTeX** (hanya untuk output PDF; DOCX tidak butuh): mis. TinyTeX.
 
-Tanpa kedua itu, script tetap bisa menyalin master & sync blog (tanpa output PDF/DOCX).
+Tanpa keduanya, script tetap bisa sinkronkan master ke blog (tanpa hasil PDF/DOCX).
+
+## Terhubung dengan Brand
+
+- Blog & versi live bab: **kanadakurniawan.com**
+- Situs web (deploy): repo `kanadakurniawan/site`
+
+## Lisensi
+
+Dokumen buku © Kanada Kurniawan. Silakan disebarluaskan, dikutip, dan dimanfaatkan untuk
+belajar — upayakan tetap memberi kredit melalui DOI bab masing-masing.
