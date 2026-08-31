@@ -12,3 +12,6 @@ Thumbs.db
 # Node
 node_modules/
 npm-debug.log*
+
+# internal brand strategy (never commit)
+brand-strategy.md
