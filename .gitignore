@@ -1,0 +1,14 @@
+# Build artifacts (regenerate via node build/generate.mjs)
+releases/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/
+
+# Node
+node_modules/
+npm-debug.log*
