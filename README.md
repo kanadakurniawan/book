@@ -24,6 +24,9 @@ Setiap **bab adalah satu artikel** yang:
    node build/sync-to-blog.mjs
    ```
 
+> Rencana detil isi buku (isi per bab, notebook, latihan, SEO, blog mapping, pacing rilis)
+> ada di **`outline.md`** — sumber kebenaran perencanaan, dipakai saat menulis tiap bab.
+
 Pendekatan "buku yang hidup" ini memungkinkan materi terus diperbarui tanpa memutus tautan
 sitasi — versi baru naik di Zenodo, concept DOI tetap sama.
 
@@ -31,8 +34,11 @@ sitasi — versi baru naik di Zenodo, concept DOI tetap sama.
 
 ```
 book/
+├── outline.md               # OUTLINE: rencana & detil isi 10 bab (sumber perencanaan)
+├── front-matter/
+│   └── cara-memakai-buku.md  # FRONT MATTER: panduan baca (tidak dirilis ke Zenodo)
 ├── manuscripts/
-│   └── ch-01-pengantar-neuron/
+│   └── ch-01-pengantar-deep-learning-meteorologi/
 │       ├── master.md        # MASTER: sumber kebenaran isi bab
 │       └── refs.bib         # referensi (dipakai saat PDF build via citeproc)
 ├── releases/

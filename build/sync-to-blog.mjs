@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, writeFileSync, mkdirSync, copyFileSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -6,6 +6,18 @@ const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const manuscriptsDir = join(root, 'manuscripts');
 const blogDir = dirname(root) + '\\site\\src\\content\\posts';
 mkdirSync(blogDir, { recursive: true });
+
+function copyRecursive(src, dest) {
+	if (!existsSync(src)) return;
+	const entries = readdirSync(src, { withFileTypes: true });
+	mkdirSync(dest, { recursive: true });
+	for (const entry of entries) {
+		const s = join(src, entry.name);
+		const d = join(dest, entry.name);
+		if (entry.isDirectory()) copyRecursive(s, d);
+		else copyFileSync(s, d);
+	}
+}
 
 function parseFrontmatter(text) {
 	const m = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
@@ -72,6 +84,13 @@ for (const ch of chapterDirs) {
 	const target = join(blogDir, `${ch}.md`);
 	writeFileSync(target, synced);
 	console.log(`  SYNC ${ch}.md -> site/src/content/posts/${ch}.md ${draft ? '(draft)' : ''}`);
+
+	const figuresSrc = join(manuscriptsDir, ch, 'figures');
+	const figuresDest = join(blogDir, ch, 'figures');
+	if (existsSync(figuresSrc)) {
+		copyRecursive(figuresSrc, figuresDest);
+		console.log(`  SYNC figures/${ch}/ -> site/src/content/posts/${ch}/figures/`);
+	}
 }
 
 console.log('Selesai.');
