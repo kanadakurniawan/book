@@ -48,6 +48,28 @@
 > **Catatan:** Kode/notebook pendamping (setup data, baseline, training) di Bab 2 belum
 > diberi nomor `Kode 2.2` dst. Tambahkan saat review.
 
+### Bab 3 — Klasifikasi: Mengenali Kategori Fenomena Cuaca
+
+| Jenis | Nomor | Caption / isi | File | Dirujuk di § |
+|---|---|---|---|---|
+| Gambar | Gambar 3.1 | Kurva sigmoid memetakan z ke (0,1) | `figures/fig-3-1-sigmoid.png` | §3.2 |
+| Gambar | Gambar 3.2 | Confusion matrix contoh data tidak seimbang | `figures/fig-3-2-confusion-matrix.png` | §3.6 |
+| Tabel | Tabel 3.1 | Perbedaan regresi vs klasifikasi | — | §3.1 |
+| Tabel | Tabel 3.2 | Perbandingan sigmoid vs softmax | — | §3.3 |
+| Tabel | Tabel 3.3 | Contoh data tidak seimbang | — | §3.6 |
+| Tabel | Tabel 3.4 | Struktur confusion matrix biner | — | §3.8, §3.6 |
+| Persamaan | (3.1) | $\sigma(z) = \frac{1}{1+e^{-z}}$ | — | §3.2 |
+| Persamaan | (3.2) | softmax | — | §3.3 |
+| Persamaan | (3.3) | binary cross-entropy | — | §3.4 |
+| Persamaan | (3.4) | F1 | — | §3.6 |
+| Kode | Kode 3.1 | Model klasifikasi biner hujan/tidak (Keras) | — | §3.5 |
+| Kode | Kode 3.2 | Model klasifikasi multi-kelas intensitas | — | §3.5 |
+| Kode | Kode 3.3 | Fit dengan class_weight untuk imbalance | — | §3.5 |
+
+### Bab 4 — Backpropagation, Optimasi dan Pelatihan
+
+*(belum ditulis)*
+
 ---
 
 ## Bagian B — Register Sitasi
@@ -75,6 +97,15 @@
 | [1] | `rosenblatt1958perceptron` | Artikel | 10.1037/h0042519 | ✅ |
 | [2] | `krizhevsky2012imagenet` | Artikel (NeurIPS) | 10.1145/3065386 | ✅ |
 | [3] | `big_pasut` | Dataset/web | URL tides.big.go.id, diakses Sep 2026 | ✅ |
+
+### Bab 3 — Klasifikasi
+
+| `[n]` | Key `refs.bib` | Jenis | DOI / ISBN / arXiv | Status |
+|---|---|---|---|---|
+| [1] | `goodfellow2016deep` | Buku | (MIT Press) | ✅ |
+| [2] | `rosenblatt1958perceptron` | Artikel | 10.1037/h0042519 | ✅ |
+| [3] | `abadi2016tensorflow` | Software/arXiv | arXiv:1603.04467 | ✅ |
+| [4] | `wmo2018verification` | Tech report (WMO) | (pdf WMO) | ✅ |
 
 ---
 
