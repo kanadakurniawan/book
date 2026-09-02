@@ -16,6 +16,8 @@
 
 - [ ] Template seragam tiap bab: Pembukaan masalah → Tujuan → Isi/konsep → Kode/notebook →
       Ringkasan kunci → Latihan → Referensi → Keyword SEO.
+- [ ] **Tujuan Pembelajaran** (3–5 butir aksi) ada di awal bab dan konsisten dengan latihan
+      (constructive alignment).
 - [ ] Sidebar "Prasyarat: Bab …" benar untuk tiap bab.
 - [ ] Notasi & glosarium satu sumber (tidak ada istilah ganda).
 - [ ] Kata isi sesuai target volume (3.000–4.500/bab); tidak ada bab terlalu kurus/gendut.

@@ -37,13 +37,46 @@ Total kata: ~36.000–40.000 kata isi (≈ 170–200 hal A5 PDF; dengan gambar d
 
 ---
 
+## Tujuan Pembelajaran Buku (setelah membaca seluruh buku)
+
+Setelah menyelesaikan buku ini, pembaca diharapkan mampu:
+
+1. **Menjelaskan** posisi deep learning dalam AI/ML dan menilai secara kritis kapan
+   deep learning layak digunakan untuk masalah meteorologi dibanding baseline statistik
+   (Bab 1, 5, 7, 10).
+2. **Membangun** model deep learning (regresi dan klasifikasi) dengan TensorFlow/Keras
+   untuk data deret waktu meteorologi Indonesia, dari persiapan data hingga evaluasi
+   (Bab 2–7).
+3. **Menerapkan** prosedur data yang benar: pembersihan, imputasi, fitur, normalisasi,
+   dan split berbasis waktu yang mencegah *leakage* (Bab 5–6).
+4. **Mengevaluasi** model dengan metrik yang tepat untuk konteks operasional — MAE/RMSE
+   untuk regresi, CSI/FAR/POD untuk kejadian ekstrem — serta membandingkannya dengan
+   baseline (Bab 2, 5, 8–9).
+5. **Mereproduksi** studi kasus end-to-end pasang surut Kapuas dan curah hujan BMKG,
+   menginterpretasi hasil, dan mengenali batas model (Bab 8–9).
+6. **Mengomunikasikan** hasil model kepada praktisi/penentu kebijakan secara jujur,
+   termasuk keterbatasan, ketidakpastian, dan implikasi etika (Bab 10).
+7. **Menindaklanjuti** pembelajaran ke arah riset lanjutan (CNN, nowcasting, downscaling,
+   generative) dengan peta jalan yang tersedia (Bab 10).
+
+> Tujuan per bab dijabarkan di masing-masing bagian bab; latihan pada tiap bab dirancang
+> untuk menguji tujuan tersebut (constructive alignment).
+
+---
+
 ## Bagian I — Fondasi (Bab 1–5)
 
 ### Bab 1 — Pengantar: Deep Learning untuk Meteorologi
 `book/manuscripts/ch-01-pengantar-deep-learning-meteorologi/master.md` · ±15–20 hal
 
-- **Tujuan bab:** memahami posisi DL dalam ML & kebumian; setup lingkungan kerja; memahami
-  peta jalan buku.
+- **Tujuan pembelajaran:** setelah bab ini, pembaca mampu:
+  1. Membedakan AI, machine learning, dan deep learning beserta contoh aplikasinya.
+  2. Mempetakan aplikasi DL meteorologi ke bab yang relevan dan membedakan mana yang
+     dibahas buku vs literatur lanjut.
+  3. Menilai kapan deep learning layak dipakai (vs baseline statistik) berdasarkan ukuran
+     data, non-linearitas, dan konteks operasional.
+  4. Menyiapkan lingkungan kerja Google Colab + TensorFlow/Keras dan membuat tensor
+     pertama dari contoh data cuaca mini.
 - **Isi:**
   1. ML vs DL — dan di mana DL berada dalam spektrum (regresi, klasifikasi, dsb).
   2. Mengapa DL relevan *sekarang*: ketersediaan data besar, GPU/Colab gratis, tooling matang.
@@ -73,7 +106,15 @@ Total kata: ~36.000–40.000 kata isi (≈ 170–200 hal A5 PDF; dengan gambar d
 ### Bab 2 — Regresi: Perceptron dan Jaringan Saraf untuk Prediksi Besaran
 `book/manuscripts/ch-02-regresi-neural-network/master.md` · ±20–25 hal
 
-- **Tujuan bab:** membangun model regresi pertama; memahami peran fungsi aktivasi; mengukur error.
+- **Tujuan pembelajaran:** setelah bab ini, pembaca mampu:
+  1. Membangun model regresi neural network (perceptron/MLP) untuk prediksi besaran
+     meteorologi.
+  2. Menjelaskan peran bobot, bias, dan fungsi aktivasi (termasuk ReLU) serta kapan
+     non-linearitas diperlukan.
+  3. Menerapkan mini-kasus pasang surut: windowing, baseline persistence, dan perbandingan
+     MAE antara model neural vs baseline.
+  4. Memilih antara MAE dan MSE berdasarkan sifat data dan tujuan, serta membagi data
+     deret waktu secara kronologis yang mencegah leakage.
 - **Isi:**
   1. Framing masalah meteo → regresi (suhu, jumlah hujan, tinggi pasang).
   2. Anatomi neuron: bobot, bias, fungsi aktivasi.
@@ -93,8 +134,13 @@ Total kata: ~36.000–40.000 kata isi (≈ 170–200 hal A5 PDF; dengan gambar d
 ### Bab 3 — Klasifikasi: Mengenali Kategori Fenomena
 `book/manuscripts/ch-03-klasifikasi-neural-network/master.md` · ±18–22 hal
 
-- **Tujuan bab:** model klasifikasi biner & multi-kelas; memahami sigmoid/softmax; metrik untuk
-  fenomena langka.
+- **Tujuan pembelajaran:** setelah bab ini, pembaca mampu:
+  1. Membangun model klasifikasi biner dan multi-kelas (hujan/tidak, level bahaya) dengan
+     TensorFlow/Keras.
+  2. Menjelaskan peran sigmoid/softmax dan binary/categorical cross-entropy.
+  3. Mendiagnosis *class imbalance* dan memilih metrik yang tepat (precision, recall, F1,
+     pengenalan CSI/FAR) — bukan hanya akurasi.
+  4. Menerapkan trade-off threshold ala praktisi peramalan untuk fenomena langka.
 - **Isi:**
   1. Klasifikasi hujan/tidak hujan; kategori level bahaya (waspada–siaga–awas).
   2. Sigmoid & softmax — hubungan dengan probabilitas.
@@ -113,7 +159,14 @@ Total kata: ~36.000–40.000 kata isi (≈ 170–200 hal A5 PDF; dengan gambar d
 ### Bab 4 — Backpropagation, Optimasi dan Pelatihan
 `book/manuscripts/ch-04-backpropagation-optimasi/master.md` · ±18–22 hal
 
-- **Tujuan bab:** memahami cara model belajar; skill praktis tuning hyperparameter.
+- **Tujuan pembelajaran:** setelah bab ini, pembaca mampu:
+  1. Menjelaskan mekanisme gradient descent dan backpropagation (aturan rantai) secara
+     intuitif.
+  2. Menganalisis peran fungsi aktivasi dari sisi gradien (ReLU vs sigmoid/tanh) dan
+     mengenali vanishing gradient.
+  3. Menerapkan tuning hyperparameter (learning rate, batch size, epochs) dan callback
+     (early stopping, ModelCheckpoint, ReduceLROnPlateau).
+  4. Membaca learning curve untuk mendiagnosa underfit/overfit sebagai transisi ke Bab 5.
 - **Isi:**
   1. Intuisi gradient descent; backpropagation via aturan rantai.
   2. **Fungsi aktivasi ditinjau dari sisi gradien** — ReLU vs sigmoid/tanh, vanishing gradient
@@ -131,7 +184,13 @@ Total kata: ~36.000–40.000 kata isi (≈ 170–200 hal A5 PDF; dengan gambar d
 ### Bab 5 — Overfitting, Regularisasi dan Evaluasi untuk Data Iklim
 `book/manuscripts/ch-05-overfitting-regularisasi-evaluasi/master.md` · ±18–22 hal
 
-- **Tujuan bab:** mendiagnosa & mencegah overfit; memilih metrik operasional yang benar.
+- **Tujuan pembelajaran:** setelah bab ini, pembaca mampu:
+  1. Mendiagnosa underfit/overfit melalui learning curve dan konsep bias-variance.
+  2. Menerapkan regularisasi (L2, dropout, early stopping) untuk mencegah overfit.
+  3. Memilih metrik operasional yang tepat (MAE/RMSE/R²/Willmott/KGE dan CSI/FAR/POD/TS)
+     sesuai tujuan.
+  4. Menerapkan cross-validation deret waktu yang benar (walk-forward/blocked) dan
+     mencegah leakage.
 - **Isi:**
   1. Bias-variance, under/overfit via learning curve.
   2. L2, dropout, early stopping.
@@ -151,7 +210,14 @@ Total kata: ~36.000–40.000 kata isi (≈ 170–200 hal A5 PDF; dengan gambar d
 ### Bab 6 — Data Meteorologi: Sumber, Kualitas dan Persiapan
 `book/manuscripts/ch-06-data-meteorologi/master.md` · ±18–24 hal
 
-- **Tujuan bab:** mengambil & membersihkan data meteo Indonesia; membangun dataset ML yang valid.
+- **Tujuan pembelajaran:** setelah bab ini, pembaca mampu:
+  1. Mengambil dan menghubungkan data meteorologi Indonesia (BMKG, ERA5, pasang surut)
+     beserta lisensi dan batasannya.
+  2. Membaca/menulis format CSV, NetCDF, GRIB dan menangani nilai hilang, outlier, serta
+     imputasi dasar.
+  3. Melakukan eksplorasi (dekomposisi musiman, distribusi, korelasi) dan feature
+     engineering (lag, musiman, ENSO/MJO).
+  4. Menerapkan normalisasi (fit pada train) dan split berbasis waktu anti-leakage.
 - **Isi:**
   1. Sumber data: **stasiun BMKG**, reanalysis **ERA5** (Copernicus), CMIP6, **pasang surut
      (PSMSL/IOC/BIG)**, satelit. Lisensi & batasan akses.
@@ -171,7 +237,11 @@ Total kata: ~36.000–40.000 kata isi (≈ 170–200 hal A5 PDF; dengan gambar d
 ### Bab 7 — Time Series dan Model Sekuensial: RNN, LSTM, GRU
 `book/manuscripts/ch-07-time-series-lstm-gru/master.md` · ±20–28 hal
 
-- **Tujuan bab:** menyusun deret waktu jadi data ML; membangun & membandingkan LSTM/GRU secara jujur.
+- **Tujuan pembelajaran:** setelah bab ini, pembaca mampu:
+  1. Menyusun deret waktu menjadi contoh-window untuk prediksi satu dan multi-langkah.
+  2. Membandingkan LSTM/GRU dengan baseline (persistence, mean, AR(p)) secara jujur.
+  3. Menjelaskan intuisi RNN → LSTM → GRU (gate ingatan/lupa) dan keterbatasannya.
+  4. Memilih arsitektur input multivariate dan strategi multi-step (recursive/direct/seq2seq).
 - **Isi:**
   1. Windows & horizon: satu vs multi-langkah.
   2. **Baseline dulu:** persistence, mean, AR(p) — DL harus mengalahkan baseline.
@@ -191,8 +261,11 @@ Total kata: ~36.000–40.000 kata isi (≈ 170–200 hal A5 PDF; dengan gambar d
 ### Bab 8 — Studi Kasus: Prediksi Pasang Surut di Perairan Kapuas (Pontianak)
 `book/manuscripts/ch-08-studi-kasus-pasang-surut-kapuas/master.md` · ±20–28 hal
 
-- **Tujuan bab:** proyek end-to-end pertama dari data Indonesia nyata; kredibilitas
-  "dari praktisi untuk praktisi".
+- **Tujuan pembelajaran:** setelah bab ini, pembaca mampu:
+  1. Menjalankan proyek end-to-end prediksi pasang surut Kapuas dari data nyata (PSMSL/BIG/IOC).
+  2. Menerapkan pipeline Bab 7 (baseline persistence vs MLP vs LSTM/GRU) dengan walk-forward.
+  3. Mengevaluasi MAE/RMSE terhadap toleransi tinggi pasang dan memplot prediksi 1–7 hari.
+  4. Menjelaskan framing jujur: ML untuk prakiraan cepat & pengisian gap, bukan klaim riset baru.
 - **Isi:**
   1. Konteks: mengapa Kapuas/Pontianak (kota rendah berawa, banjir rob, interaksi pasang–debit
      sungai); jenis pasang (semi-diurnal/diurnal/campuran).
@@ -212,7 +285,12 @@ Total kata: ~36.000–40.000 kata isi (≈ 170–200 hal A5 PDF; dengan gambar d
 ### Bab 9 — Studi Kasus: Prediksi Curah Hujan Stasiun BMKG
 `book/manuscripts/ch-09-studi-kasus-curah-hujan-bmkg/master.md` · ±22–30 hal
 
-- **Tujuan bab:** prediktor hujan terverifikasi metrik operasional; regresi & klasifikasi digabung.
+- **Tujuan pembelajaran:** setelah bab ini, pembaca mampu:
+  1. Membangun prediktor hujan stasiun BMKG (regresi jumlah hujan + klasifikasi intensitas).
+  2. Menerapkan verifikasi operasional dengan CSI/FAR/POD dan trade-off threshold.
+  3. Membandingkan walk-forward vs baseline (persistence, klimatologi, ARIMA singkat).
+  4. Melakukan interpretasi awal (permutation importance/SHAP) dan menyusun tabel verifikasi
+     per kategori.
 - **Isi:**
   1. Konteks layanan (BBMKG, peringatan dini) tanpa sensasionalisme.
   2. Data hujan harian stasiun + fitur regional ERA5 + musiman.
@@ -235,7 +313,12 @@ Total kata: ~36.000–40.000 kata isi (≈ 170–200 hal A5 PDF; dengan gambar d
 ### Bab 10 — Dari Riset ke Praktik: Operasional, Interpretasi, dan Arah ke Depan
 `book/manuscripts/ch-10-operasional-arah-riset/master.md` · ±16–22 hal
 
-- **Tujuan bab:** menjembatani model → operasional & menavigasi arah riset lanjut.
+- **Tujuan pembelajaran:** setelah bab ini, pembaca mampu:
+  1. Merancang monitoring drift dan strategi retraining/kalibrasi untuk model operasional.
+  2. Mengkuantifikasi ketidakpastian prediksi (interval/quantile, ensembel multi-seed).
+  3. Menginterpretasi model (SHAP) dan mengaitkannya dengan pengetahuan atmosfer.
+  4. Menjelaskan keterbatasan & etika penggunaan DL di institusi (anti-overhype, disclaimer).
+  5. Menyusun peta jalan belajar lanjut (CNN, nowcasting, downscaling, generative).
 - **Isi:**
   1. **Monitoring drift** — atmosfer non-stasioner, model "rusak" seiring waktu;
      strategi retraining/kalibrasi ulang.
@@ -275,8 +358,10 @@ Total kata: ~36.000–40.000 kata isi (≈ 170–200 hal A5 PDF; dengan gambar d
 
 ## Aturan Konsistensi Global
 
-1. **Template seragam tiap bab:** Pembukaan masalah → Tujuan → Isi/konsep → Kode/notebook →
-   Ringkasan kunci → Latihan → Referensi (IEEE, sertakan DOI) → Keyword SEO.
+1. **Template seragam tiap bab:** Tujuan Pembelajaran (3–5 butir aksi) → Pembukaan masalah →
+   Isi/konsep → Kode/notebook → Ringkasan kunci → Latihan → Referensi (IEEE, sertakan DOI)
+   → Keyword SEO. Latihan tiap bab dirancang untuk menguji Tujuan Pembelajaran
+   (*constructive alignment*); rujukan tujuan buku di bagian "Tujuan Pembelajaran Buku".
 2. **Notasi & glosarium satu sumber:** istilah Indonesia + Inggris di pemunculan pertama
    (mis. "fungsi aktivasi (*activation function*)"); istilah sama di blog/buku/YouTube.
 3. **Setiap bab berdiri sendiri** (sidebar "Prasyarat: Bab …"), tapi satu narasi & notasi.
