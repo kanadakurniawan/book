@@ -8,9 +8,32 @@
 
 - Estimasi total: **±195–260 halaman (du ~220)** pada format PDF/A5.
 - Struktur: 4 bagian, 10 bab + front/back matter.
-- Pola per bab: **1 bab ≈ 1 artikel blog ≈ 1 notebook Colab (≈1 DOI Zenodo)**.
+- Pola per bab: **1 bab ≈ 1 artikel blog ≈ 1 notebook Colab.**
+- **1 buku = 1 DOI Zenodo** (PDF+DOCX utuh), versi bertambah tiap milestone rilis:
+  v1.0 (Bab 1–5) → v1.1 (Bab 6–9) → v2.0 (lengkap 10 bab).
 - Setiap bab berdiri sendiri; sidebar "Prasyarat: Bab …" memetakan urutan baca; notasi &
   terminologi seragam di seluruh buku (istilah Indonesia + Inggris di pemunculan pertama).
+
+### Target Volume per Bab (agar layak sebagai "bab buku")
+
+Bab 1–2 saat ini ~1.100–1.400 kata (terlalu tipis). Target tambahan saat menulis ulang
+agar satu buku utuh terasa seimbang & pantas di Zenodo:
+
+| Bab | Target kata isi | Catatan |
+|---|---|---|
+| 1 | 3.000–3.500 | Pengantar + setup + peta aplikasi diperluas |
+| 2 | 3.500–4.000 | Tambah turunan loss, contoh numerik lebih detail |
+| 3 | 3.000–3.500 | Tambah contoh confusion matrix + trade-off threshold |
+| 4 | 3.500–4.000 | Kalkulasi backprop tertulis (langkah demi langkah) |
+| 5 | 3.500–4.000 | Tambah studi mini sample imbalance |
+| 6 | 3.500–4.000 | Tambah studi data BMKG/ERA5 nyata |
+| 7 | 4.000–4.500 | Tambah jadwal multi-step & perbandingan univariate/multivariate |
+| 8 | 4.000–4.500 | Perdalam framing analisis harmonik vs ML |
+| 9 | 4.000–4.500 | Table verifikasi kategori + interpretasi |
+| 10 | 3.000–3.500 | Operasional + etika + arah riset |
+
+Total kata: ~36.000–40.000 kata isi (≈ 170–200 hal A5 PDF; dengan gambar diperkirakan
+±220 halaman, cocok rentang estimasi). Laju target: **1–2 bab/bulan**.
 
 ---
 
@@ -42,7 +65,7 @@
 - **Gaya:** perkenalan hangat + formal; banyak diagram peta aplikasi.
 - **SEO:** "apa itu deep learning", "deep learning untuk meteorologi",
   "pengantar deep learning bahasa Indonesia".
-- **Blog:** 2 artikel (konsep; panduan setup Colab/TensorFlow). DOI bab.
+- **Blog:** 2 artikel (konsep; panduan setup Colab/TensorFlow).
 - **Referensi kunci:** LeCun et al. (2015), Reichstein et al. (2019), Goodfellow et al. (2016).
 
 ---
@@ -178,7 +201,7 @@
   3. Dataset pasang (PSMSL/BIG/IOC): sampling, gap, kualitas.
   4. Pipeline Bab 7: baseline persistence vs MLP vs LSTM/GRU; walk-forward.
   5. Evaluasi MAE/RMSE vs toleransi tinggi pasang; plot prediksi 1–7 hari; diskusi batas model.
-- **Reproduksibilitas:** data + notebook (GitHub/Zenodo), **DOI bab**.
+- **Reproduksibilitas:** data + notebook (GitHub/Zenodo), referensi ke **DOI buku**.
 - **Latihan:** prediksi stasiun lain (mis. Semarang/rob) & bandingkan.
 - **SEO:** "prediksi pasang surut LSTM", "pasang surut pontianak kapuas",
   "prediksi banjir rob machine learning".
@@ -263,6 +286,139 @@
    bukan klaim riset baru).
 6. **Framing jujur di kasus:** DL dibandingkan dengan baseline (persistence/ARIMA/harmonik);
    hasil dilaporkan apa adanya.
+
+---
+
+## Kriteria Sitasi (wajib untuk semua bab)
+
+Standar sitasi seluruh bab, selaras dengan aturan IEEE di umbrella (§3.1b) dan prinsip
+"etika sitasi" (selalu kutip sumber, sertakan DOI, periksa fakta).
+
+### 1. Gaya & Format (aturan dasar)
+
+- **Gaya:** IEEE, sitasi bernomor `[1]`, `[2]`, dst — muncul **berurutan sesuai kemunculan
+  pertama** di teks.
+- Format referensi di daftar akhir mengikuti IEEE: penulis → judul → sumber → volume/
+  halaman → tahun → DOI.
+- Setiap bab wajib punya berkas `refs.bib` yang **identik urutan dan isinya** dengan daftar
+  `References` di `master.md` (agar output PDF via citeproc sama dengan versi Markdown/blog).
+
+### 2. Verifikasi `refs.bib` & DOI (wajib lolos sebelum rilis)
+
+- **Semua referensi harus benar-benar ada** — author, judul, jurnal/prosiding, volume,
+  halaman, tahun dicek silang, bukan dihafal/tebak.
+- **DOI wajib dicantumkan bila tersedia**, dan diuji lewat `doi.org/<doi>`; DOI yang salah
+  dianggap cacat.
+- URL (mis. dokumentasi TensorFlow) hanya bila tidak ada DOI, dan sertakan **tanggal akses**.
+
+### 3. Jenis Sumber — hierarki prioritas
+
+| Prioritas | Jenis | Catatan |
+|---|---|---|
+| 1 | Jurnal/prosiding *peer-reviewed*, buku teks klasik | Sumber utama klaim teknis |
+| 2 | Buku teks DL/ML (Goodfellow, Bishop, Géron, Chollet, Nielsen) | Untuk definisi & derivasi inti |
+| 3 | Dokumentasi resmi library (TensorFlow, Keras, xarray, Pandas) | Cantumkan versi API |
+| 4 | Dataset & data (BMKG, ERA5/Copernicus, PSMSL/BIG) | Wajib: lisensi, identifikasi dataset, versi, cara akses |
+| 5 | Preprint (arXiv/SSRN) | Boleh bila tak ada versi peer-reviewed; tandai "preprint" |
+| 6 | Blog/artikel non-review, Wikipedia | **Hanya untuk konteks/lintasan**, bukan penguat klaim inti; usahakan diganti sumber primer |
+| ✗ | Sumber sekunder tanpa kredibilitas, tautan mati, UGC tanpa verifikasi | Jangan |
+
+### 4. Kriteria Keilmuan
+
+- **Relevansi & keterkinian:** untuk topik yang cepat berubah (arsitektur DL, tooling),
+  utamakan rilis ≤ 5–10 tahun; buku teks klasik boleh lama asal fondasi.
+- **Kebenaran klaim:** setiap pernyataan substantif (definisi, angka, sifat matematis,
+  klaim performa) harus bersitasi; data/kutipan harus bisa dilacak ke sumber.
+- **Bahasa:** preferensikan sumber berbahasa Inggris (ilmiah). Sumber berbahasa Indonesia
+  hanya dari institusi resmi (BMKG, BPP) atau jurnal nasional terindeks.
+- **Konteks meteorologi:** preferensikan literatur domain (meteo/ocean/hidro) bila ada,
+  misal paper time series/pasang surut/ML-cuaca; jangan hanya kutip literatur CS.
+
+### 5. Aturan Penggunaan dalam Teks
+
+- **Sitasi per klaim**, bukan per paragraf kabur — pembaca bisa menelusuri asal setiap
+  pernyataan teknis.
+- **Parafrase, bukan salin-tempel kata demi kata** (hindari plagiarisme); kutipan langsung
+  pendek diberi tanda kutip.
+- **Konsistensi lintas kanal:** istilah + sitasi yang sama di buku, blog, dan YouTube
+  (minimal satu sitasi primer per artikel/video).
+- **Konteks gambar & data:** setiap gambar/tabel yang diambil memberi atribusi + lisensi di
+  keterangan; data disebutkan sumbernya, bukan hanya "BMKG" tanpa spesifik.
+- **Self-citation:** kutip DOI buku sendiri (melalui `bookDOI` pada bab terkait)
+  diperbolehkan secukupnya, tidak berlebihan, dan jangan jadi mayoritas referensi.
+
+### 6. Jumlah & Struktur per Bab
+
+- **Fondasi (Bab 1–5):** 6–12 referensi, utamanya buku teks + paper kunci.
+- **Data & sekuensial (Bab 6–7):** 8–15, termasuk dokumentasi dataset/library.
+- **Studi kasus & operasional (Bab 8–10):** 10–20, termasuk paper domain (pasang surut,
+  ML cuaca, verifikasi) + data sumber.
+- Hampir selalu akhiri referensi dengan DOI bila tersedia (ini pula nilai diferensiasi
+  "DOI sebagai kredibilitas" di umbrella).
+
+### 7. Kontrol Kualitas Final
+
+- Jalankan cek sitasi: **semua `[n]` di teks harus ada di daftar akhir** dan sebaliknya;
+  urutan incremental pertama-muncul.
+- Uji output `node build/generate.mjs` → PDF; pastikan `refs.bib` tidak ada kunci dobel
+  dan citeproc bebas error.
+
+---
+
+## Alur Kerja Penulisan & Evaluasi Internal
+
+Urutan kerja untuk menyelesaikan buku menjadi satu dokumen final, **sebelum** DOI/ISBN,
+GitHub publik, dan blog.
+
+### Fase 1 — Menulis (Bab 1–10)
+
+1. Tulis `manuscripts/ch-0N-<slug>/master.md` + `refs.bib` + `figures/` + `notebooks/`
+   per bab, mengikuti **target volume di atas** (3.000–4.500 kata/bab).
+2. **Commit lokal secara berkala** — minimal satu commit per bab (backup & riwayat).
+   Repo bisa **private** selama development; publik dibuat saat siap rilis.
+3. Notebook & figur disiapkan seiring bab (bukan ditunda ke akhir).
+
+### Fase 2 — Evaluasi Internal (sebelum publikasi)
+
+Checklist wajib lolos **seluruh bab** sebelum membuat DOI/ISBN:
+
+**A. Isi & keilmuan**
+- Semua klaim teknis disitasi; tidak ada pernyataan tanpa sumber untuk klaim substantif.
+- Ketepatan istilah: istilah Indonesia + Inggris benar, konsisten di seluruh buku.
+- Anti-overhype: semua hasil DL dibandingkan baseline; disclaimer "materi pengenalan" ada.
+
+**B. Struktur & konsistensi**
+- Template seragam tiap bab (Pembukaan → Tujuan → Isi → Kode → Ringkasan → Latihan →
+  Referensi → SEO).
+- Sidebar Prasyarat benar untuk tiap bab.
+- Notasi & glosarium satu sumber (tidak ada istilah ganda).
+
+**C. Sitasi**
+- `[n]` di teks ≡ daftar References ≡ `refs.bib`; urutan incremental; DOI/ISBN/arXiv tercantum.
+- Cek semua DOI via `doi.org/<doi>`; URL dengan tanggal akses.
+
+**D. Kode & reproduksibilitas**
+- Semua notebook dapat dieksekusi dari awal-akhir (Colab) tanpa error; seed tetap, versi TF
+  tercatat.
+- Data yang dipakai tersedia/di-zenodo (untuk kasus).
+
+**E. Build & output**
+- `node build/generate.mjs` menghasilkan PDF+DOCX tanpa error (perlu Pandoc+LaTeX pada
+  mesin rilis).
+- Total halaman realistis (target ±220); tidak ada bab yang terlalu kurus/gendut.
+
+### Fase 3 — Penerbitan
+
+Setelah evaluasi lolos:
+1. **DOI Zenodo** — daftarkan buku utuh (PDF+DOCX `releases/`), konsep versi untuk revisi
+   berikutnya; salin ke `bookDOI` semua bab.
+2. **ISBN** — daftarkan buku (untuk versi cetak/standar internasional).
+3. **GitHub publik** — buka repo (book + kode), rilis `v1.0.0` dengan tag.
+4. **Blog** — posting **2 artikel/bulan** berbasis bab (dari buku final), lengkap dengan
+   notebook & figur; sinkronkan via `node build/sync-to-blog.mjs`.
+
+> Prinsip: tidak ada publikasi (Zenodo/ISBN/GitHub publik/blog) sebelum **semua 10 bab**
+> selesai dan lolos evaluasi internal Fase 2.
 
 ---
 

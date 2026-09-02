@@ -91,6 +91,18 @@ for (const ch of chapterDirs) {
 		copyRecursive(figuresSrc, figuresDest);
 		console.log(`  SYNC figures/${ch}/ -> site/src/content/posts/${ch}/figures/`);
 	}
+
+	const notebooksRoot = join(root, 'notebooks');
+	if (existsSync(notebooksRoot)) {
+		const prefix = (ch.match(/^ch-\d+/) || [ch])[0] + '-';
+		const files = readdirSync(notebooksRoot).filter((f) => f.startsWith(prefix));
+		if (files.length > 0) {
+			const notebooksDest = join(blogDir, ch, 'notebooks');
+			mkdirSync(notebooksDest, { recursive: true });
+			for (const f of files) copyFileSync(join(notebooksRoot, f), join(notebooksDest, f));
+			console.log(`  SYNC notebooks/${ch}/ -> site/src/content/posts/${ch}/notebooks/`);
+		}
+	}
 }
 
 console.log('Selesai.');
