@@ -32,12 +32,18 @@
 | Jenis | Nomor | Caption / isi | File | Dirujuk di § |
 |---|---|---|---|---|
 | Gambar | Gambar 2.1 | Struktur neuron buatan (x → z → aktivasi a) | `figures/fig-2-1-neuron.png` | §2.2 |
-| Tabel | Tabel 2.1 | Perbandingan MAE vs MSE | — | §2.6 |
+| Tabel | Tabel 2.1 | Contoh target regresi meteorologi (satuan & sifat data) | — | §2.1 |
+| Tabel | Tabel 2.2 | Contoh windowing (dua langkah) pasang surut | — | §2.5 |
+| Tabel | Tabel 2.3 | Perbandingan MAE vs MSE | — | §2.6 |
 | Persamaan | (2.1) | $z = \sum w_i x_i + b$ | — | §2.2 |
 | Persamaan | (2.2) | $a = f(z)$ | — | §2.2 |
 | Persamaan | (2.3) | $\hat{y} = wx + b$ | — | §2.3 |
 | Persamaan | (2.4) | $\mathrm{ReLU}(x) = \max(0, x)$ | — | §2.4 |
+| Persamaan | (2.5) | $\mathrm{MAE} = \frac{1}{n}\sum \|\cdot\|$ (contoh) | — | §2.6 |
+| Persamaan | (2.6) | $\mathrm{MSE} = \frac{1}{n}\sum (\cdot)^2$ (contoh) | — | §2.6 |
 | Kode | Kode 2.1 | Definisi arsitektur MLP regresi (Keras) | — | §2.4 |
+| Kode | Kode 2.2 | Windowing + split berbasis waktu + data sintetik | — | §2.5 |
+| Kode | Kode 2.3 | Compile, latih, evaluasi vs persistence | — | §2.5 |
 
 > **Catatan:** Kode/notebook pendamping (setup data, baseline, training) di Bab 2 belum
 > diberi nomor `Kode 2.2` dst. Tambahkan saat review.
