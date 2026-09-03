@@ -11,8 +11,6 @@ chapter: 2
 book: "Pengantar Deep Learning untuk Meteorologi"
 ---
 
-# Bab 2 — Regresi: Perceptron dan Jaringan Saraf untuk Prediksi Besaran
-
 > **Prasyarat:** Bab 1 (tensor, konsep ML/DL). Kode memakai TensorFlow/Keras di Google
 > Colab (Bab 1: setup lingkungan). Jika Anda sudah paham regresi linear dan pernah menulis
 > `Dense` layer, Anda boleh lompat cepat ke §2.5 — tetapi pastikan Anda tahu istilah
