@@ -90,15 +90,15 @@ for (const ch of chapterDirs) {
 	const draft = fm.status === 'draft';
 	const title = unquote(fm.title);
 	const description = unquote(fm.description);
-	const categories = (fm.categories || '[]').replace(/^\[/, '').replace(/\]$/, '');
-	const tags = (fm.tags || '[]').replace(/^\[/, '').replace(/\]$/, '');
+	const categories = (fm.categories || '[]').replace(/^\[/, '').replace(/\]$/, '').split(',').map((s) => unquote(s.trim())).filter(Boolean);
+	const tags = (fm.tags || '[]').replace(/^\[/, '').replace(/\]$/, '').split(',').map((s) => unquote(s.trim())).filter(Boolean);
+	const allTags = [...new Set([...categories, ...tags])];
 	const synced = [
 		'---',
 		`title: ${q(title)}`,
 		`description: ${q(description)}`,
-		`pubDate: ${fm.pubDate || '2026-01-01'}`,
-		`categories: [${categories}]`,
-		`tags: [${tags}]`,
+		`pubDatetime: ${fm.pubDate || '2026-01-01'}`,
+		`tags: [${allTags.map((t) => q(t)).join(', ')}]`,
 		`draft: ${draft}`,
 		'---',
 		rewriteFigurePaths(parsed.rest, ch),
