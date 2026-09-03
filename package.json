@@ -1,0 +1,12 @@
+{
+  "name": "pengantar-dl-meteorologi-book",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync": "node build/sync-to-blog.mjs",
+    "watch": "node build/watch.mjs",
+    "generate": "node build/generate.mjs"
+  },
+  "description": "Buku 'Pengantar Deep Learning untuk Meteorologi' — manuscript, release, dan sinkronisasi ke blog."
+}

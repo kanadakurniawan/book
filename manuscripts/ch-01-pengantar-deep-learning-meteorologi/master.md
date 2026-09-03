@@ -425,3 +425,5 @@ studi kasus di Bab 8–9, GPU mempermudah, tetapi Colab menyediakannya gratis.
 7. M. Reichstein et al., "Deep learning and process understanding for data-driven Earth
    system science," *Nature*, vol. 566, no. 7743, pp. 195–204, Feb. 2019,
    doi: 10.1038/s41586-019-0912-1.
+
+
