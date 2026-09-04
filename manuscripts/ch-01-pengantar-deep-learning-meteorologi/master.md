@@ -4,7 +4,7 @@ description: "Bab pertama, memahami posisi deep learning dalam machine learning 
 pubDate: 2026-09-01
 categories: ["Deep Learning", "Meteorologi"]
 tags: ["deep learning", "meteorologi", "tensorflow", "colab", "pengantar"]
-version: "1.3.1"
+version: "1.3.2"
 bookDOI: "10.5281/zenodo.0000000"
 status: published
 chapter: 1
@@ -87,9 +87,8 @@ semakin abstrak [4].
 
 ![Gambar 1.1: Keterkaitan artificial intelligence, machine learning, dan deep learning](figures/fig-1-1-hierarki-ai-by-chatgpt.png)
 
-**Gambar 1.1**: Keterkaitan *artificial intelligence*, *machine learning*, dan *deep learning*
-serta contoh model generatif modern. AI adalah payung terluas; ML cabangnya yang
-belajar dari data; DL bagian dari ML yang menggunakan jaringan saraf berlapis.
+**Gambar 1.1**: AI sebagai payung terluas, dengan ML sebagai cabangnya yang belajar
+dari data, dan DL sebagai bagian ML yang memakai jaringan saraf berlapis.
 
 Sebagaimana dilihat pada Gambar 1.1, *artificial intelligence* adalah payung terluas,
 *machine learning* adalah cabangnya yang belajar dari data, dan *deep learning* adalah
