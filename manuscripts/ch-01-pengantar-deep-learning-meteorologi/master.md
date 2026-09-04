@@ -4,7 +4,7 @@ description: "Bab pertama, memahami posisi deep learning dalam machine learning 
 pubDate: 2026-09-01
 categories: ["Deep Learning", "Meteorologi"]
 tags: ["deep learning", "meteorologi", "tensorflow", "colab", "pengantar"]
-version: "1.3.2"
+version: "1.3.3"
 bookDOI: "10.5281/zenodo.0000000"
 status: published
 chapter: 1
@@ -448,15 +448,22 @@ Dua hal teknis kecil yang kelak berguna:
 Anda tidak perlu menghafal ini sekarang, tetapi referensi di sini membantu ketika error
 muncul.
 
-### Mini-challenge: Prakiraan Persistence vs. Rata-rata Klimatologis
+### Mini-challenge: Prakiraan *Persistence* vs. Rata-rata Klimatologis
 
 Sebelum kita bicara tentang model yang sophisticated, mari kita lihat dua baseline
-yang akan menjadi "lawan tanding" deep learning di sepanjang buku:
+yang akan menjadi "lawan tanding" deep learning di sepanjang buku. Keduanya dipakai
+luas dalam verifikasi prakiraan cuaca sebagai rujukan keterampilan model [10]:
 
-- **Persistence**: $\hat{y}_{t+1} = y_t$, prakiraan besok = nilai hari ini.
-- **Rata-rata klimatologis**: $\hat{y}_{t+1} = \bar{y}_{\text{bulan}, \text{stasiun}}$
- , prakiraan besok = rata-rata historis untuk hari yang sama di bulan dan lokasi
-  tersebut.
+- ***Persistence*** (prakiraan-beku): $\hat{y}_{t+1} = y_t$. Prakiraan besok sama
+  dengan pengamatan terakhir yang kita punya. Secara intuitif: "asumsinya tidak
+  berubah". Untuk data yang berubah pelan (pasang surut, suhu harian), persistence
+  sering kali sudah cukup baik; untuk data yang berfluktuasi cepat, persistence kalah.
+  Istilah *persistence* dipakai di seluruh literatur verifikasi prakiraan internasional
+  (WMO WWRP/WGNE, [10]).
+- **Rata-rata klimatologis**: $\hat{y}_{t+1} = \bar{y}_{\text{bulan}, \text{stasiun}}$,
+  prakiraan besok = rata-rata historis untuk hari yang sama di bulan dan lokasi
+  tersebut. Cocok untuk pola musiman yang kuat; gagal saat rezim menyimpang dari
+  klimatologi (mis. El Niño kuat).
 
 Mari kita uji pada data sintetis sederhana (variasi harian menyerupai suhu):
 
@@ -494,10 +501,10 @@ plt.title("Dua baseline pada data sintetis")
 plt.show()
 ```
 
-Pada data seperti ini, **klimatologis biasanya mengalahkan persistence** karena
-pola periodik kita sengaja masuk akal. Untuk fenomena dengan persistensi tinggi (pasang
-surut, suhu harian), persistence sering menang. Untuk yang periodik (curah hujan
-musiman), klimatologis sering lebih baik. Deep learning baru layak jika bisa
+Pada data seperti ini, **klimatologis biasanya mengalahkan *persistence*** karena
+pola periodik kita sengaja masuk akal. Untuk fenomena dengan *persistence* tinggi
+(pasang surut, suhu harian), *persistence* sering menang. Untuk yang periodik (curah
+hujan musiman), klimatologis sering lebih baik. Deep learning baru layak jika bisa
 mengalahkan keduanya secara konsisten, kita akan kembali ke prinsip ini di setiap bab
 kasus (Bab 8–9).
 
@@ -690,5 +697,8 @@ sumber, lisensi, dan kualitas, bekal penting untuk Bab 8–9.
 9. S. Lestari, A. King, C. Vincent, D. Karoly, and A. Protat, "Seasonal dependence of
    rainfall extremes in and around Jakarta, Indonesia," *Weather and Climate Extremes*,
    vol. 24, p. 100202, Jun. 2019, doi: 10.1016/j.wace.2019.100202.
+10. I. T. Jolliffe and D. B. Stephenson, eds., *Forecast Verification: A Practitioner's
+    Guide in Atmospheric Science*, 2nd ed. Chichester, UK: Wiley, 2011,
+    doi: 10.1002/9781119960003.
 
 

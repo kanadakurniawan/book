@@ -91,6 +91,7 @@
 | [7] | `reichstein2019deep` | Artikel | 10.1038/s41586-019-0912-1 | ✅ |
 | [8] | `wheeler2004rmm` | Artikel | 10.1175/1520-0493(2004)132<1917:AARMMI>2.0.CO;2 | ✅ |
 | [9] | `lestari2019jakarta` | Artikel | 10.1016/j.wace.2019.100202 | ✅ |
+| [10] | `jolliffe2011forecast` | Buku | 10.1002/9781119960003 | ✅ |
 
 ### Bab 2 — Regresi
 
