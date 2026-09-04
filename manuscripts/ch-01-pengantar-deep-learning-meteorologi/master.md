@@ -4,7 +4,7 @@ description: "Bab pertama, memahami posisi deep learning dalam machine learning 
 pubDate: 2026-09-01
 categories: ["Deep Learning", "Meteorologi"]
 tags: ["deep learning", "meteorologi", "tensorflow", "colab", "pengantar"]
-version: "1.3.0"
+version: "1.3.1"
 bookDOI: "10.5281/zenodo.0000000"
 status: published
 chapter: 1
@@ -51,7 +51,7 @@ Setelah menyelesaikan bab ini, Anda diharapkan mampu:
 
 1. **Membedakan** artificial intelligence, machine learning, dan deep learning beserta
    contoh aplikasinya di meteorologi.
-2. **Mempetakan** aplikasi deep learning meteorologi ke bab yang relevan dan membedakan
+2. **Memetakan** aplikasi deep learning meteorologi ke bab yang relevan dan membedakan
    mana yang dibahas buku ini vs literatur lanjut.
 3. **Menilai** secara kritis kapan deep learning layak dipakai dibanding baseline statistik
    (ukuran data, non-linearitas, konteks operasional).
@@ -86,6 +86,10 @@ sederhana, lalu lapisan-lapisan berikutnya menggabungkannya menjadi representasi
 semakin abstrak [4].
 
 ![Gambar 1.1: Keterkaitan artificial intelligence, machine learning, dan deep learning](figures/fig-1-1-hierarki-ai-by-chatgpt.png)
+
+**Gambar 1.1**: Keterkaitan *artificial intelligence*, *machine learning*, dan *deep learning*
+serta contoh model generatif modern. AI adalah payung terluas; ML cabangnya yang
+belajar dari data; DL bagian dari ML yang menggunakan jaringan saraf berlapis.
 
 Sebagaimana dilihat pada Gambar 1.1, *artificial intelligence* adalah payung terluas,
 *machine learning* adalah cabangnya yang belajar dari data, dan *deep learning* adalah
