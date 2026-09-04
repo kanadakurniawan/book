@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Pengantar Deep Learning untuk Meteorologi"
 description: "Bab pertama, memahami posisi deep learning dalam machine learning dan kebumian, peta aplikasi meteo yang dibahas di buku ini, kapan DL layak dipakai, serta panduan menyiapkan lingkungan Google Colab + TensorFlow."
 pubDate: 2026-09-01
@@ -6,7 +6,7 @@ categories: ["Deep Learning", "Meteorologi"]
 tags: ["deep learning", "meteorologi", "tensorflow", "colab", "pengantar"]
 version: "1.3.5"
 bookDOI: "10.5281/zenodo.0000000"
-status: published
+status: draft
 chapter: 1
 book: "Pengantar Deep Learning untuk Meteorologi"
 ---

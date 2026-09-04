@@ -68,7 +68,32 @@
 
 ### Bab 4 — Backpropagation, Optimasi dan Pelatihan
 
-*(belum ditulis)*
+| Jenis | Nomor | Caption / isi | File | Dirujuk di § |
+|---|---|---|---|---|
+| Gambar | Gambar 4.1 | Contoh learning curve (train turun, val naik → overfit) | `figures/fig-4-1-learning-curve.png` | §4.7 |
+| Tabel | Tabel 4.1 | Perbandingan fungsi aktivasi dari sisi gradien | — | §4.3 |
+| Tabel | Tabel 4.2 | SGD vs Adam | — | §4.4 |
+| Persamaan | (4.1) | $w \leftarrow w - \eta \frac{\partial L}{\partial w}$ | — | §4.1 |
+| Persamaan | (4.2) | aturan rantai backprop | — | §4.2 |
+| Persamaan | (4.3) | $\sigma'(z)=\sigma(z)(1-\sigma(z))$ | — | §4.3 |
+| Kode | Kode 4.1 | GradientTape manual backprop | — | §4.2 |
+| Kode | Kode 4.2 | LR & batch di Keras | — | §4.5 |
+| Kode | Kode 4.3 | Callback (EarlyStopping, Checkpoint, ReduceLROnPlateau + scheduler) | — | §4.6 |
+
+### Bab 5 — Overfitting, Regularisasi dan Evaluasi untuk Data Iklim
+
+| Jenis | Nomor | Caption / isi | File | Dirujuk di § |
+|---|---|---|---|---|
+| Gambar | Gambar 5.1 | Learning curve overfit | `figures/fig-5-1-learning-curve.png` | §5.2 |
+| Tabel | Tabel 5.1 | Underfit / fit / overfit | — | §5.1 |
+| Tabel | Tabel 5.2 | Panduan memilih metrik regresi | — | §5.4 |
+| Tabel | Tabel 5.3 | Kuartet verifikasi WMO (POD/FAR/CSI/TS) | — | §5.4 |
+| Tabel | Tabel 5.4 | Dua model, cerita metrik berbeda | — | §5.4 |
+| Tabel | Tabel 5.5 | Skema walk-forward (5 fold) | — | §5.5 |
+| Persamaan | (5.1) | L2: $\mathcal{L}_{total} = \mathcal{L}_{data} + \lambda \sum w_j^2$ | — | §5.3 |
+| Kode | Kode 5.1 | EarlyStopping | — | §5.3 |
+| Kode | Kode 5.2 | Arsitektur + L2 + dropout | — | §5.3 |
+| Kode | Kode 5.3 | Walk-forward sederhana | — | §5.5 |
 
 ---
 
@@ -109,6 +134,24 @@
 | [2] | `rosenblatt1958perceptron` | Artikel | 10.1037/h0042519 | ✅ |
 | [3] | `abadi2016tensorflow` | Software/arXiv | arXiv:1603.04467 | ✅ |
 | [4] | `wmo2018verification` | Tech report (WMO) | (pdf WMO) | ✅ |
+
+### Bab 4 — Backpropagation, Optimasi dan Pelatihan
+
+| `[n]` | Key `refs.bib` | Jenis | DOI / ISBN / arXiv | Status |
+|---|---|---|---|---|
+| [1] | `rumelhart1986learning` | Artikel | 10.1038/323533a0 | ✅ |
+| [2] | `kingma2015adam` | Artikel (ICLR) | arXiv:1412.6980 | ✅ |
+| [3] | `goodfellow2016deep` | Buku | (MIT Press) | ✅ |
+| [4] | `abadi2016tensorflow` | Software/arXiv | arXiv:1603.04467 | ✅ |
+
+### Bab 5 — Overfitting, Regularisasi dan Evaluasi
+
+| `[n]` | Key `refs.bib` | Jenis | DOI / ISBN / arXiv | Status |
+|---|---|---|---|---|
+| [1] | `wmo2018verification` | Tech report (WMO) | (pdf WMO) | ✅ |
+| [2] | `goodfellow2016deep` | Buku | (MIT Press) | ✅ |
+| [3] | `srivastava2014dropout` | Artikel (JMLR) | (JMLR) | ✅ |
+| [4] | `gupta2009decomposition` | Artikel (J. Hydrol) | 10.1016/j.jhydrol.2009.08.003 | ✅ |
 
 ---
 

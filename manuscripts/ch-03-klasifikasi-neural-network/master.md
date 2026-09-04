@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Klasifikasi: Mengenali Kategori Fenomena Cuaca"
 description: "Bab 3 — membangun model klasifikasi biner dan multi-kelas untuk fenomena cuaca: sigmoid/softmax, cross-entropy, class imbalance, precision/recall/F1, dan trade-off threshold untuk kejadian langka."
 pubDate: 2026-09-01

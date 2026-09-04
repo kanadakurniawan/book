@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Overfitting, Regularisasi dan Evaluasi untuk Data Iklim"
 description: "Bab 5 — mendiagnosa dan mencegah overfit (bias-variance, L2, dropout, early stopping), memilih metrik operasional yang tepat (MAE/RMSE/R²/Willmott/KGE dan CSI/FAR/POD/TS), serta cross-validation deret waktu (walk-forward) untuk data iklim."
 pubDate: 2026-09-01
@@ -30,7 +30,9 @@ Setelah menyelesaikan bab ini, Anda diharapkan mampu:
 
 ## 5.1 Bias-Variance: Dua Sumber Kesalahan
 
-Setiap model memiliki dua jenis kesalahan struktural:
+Setiap model memiliki dua jenis kesalahan struktural. Kerangka ini juga yang dipakai
+literatur verifikasi operasional — misalnya bagaimana WMO meninjau keandalan metrik
+perkiraan [1], dan pembahasan mendalam evaluasi model bisa dilihat di [2]:
 
 - **Bias tinggi** — model terlalu sederhana, tidak menangkap pola data (underfit).
   Misal: memakai garis lurus untuk data yang jelas tidak linear.
@@ -185,6 +187,21 @@ pada kelembapan dan mengabaikan yang lain; dengan L2, bobot besar "dikenai biaya
 saat ada sedikit noise pada pengukuran kelembapan — relevan karena data lapangan selalu
 ber-noise.
 
+### Memilih kekuatan regularisasi (lambda & dropout rate)
+
+- **L2 lambda**: mulai dari `1e-4`–`1e-3`. Terlalu kecil → tidak berefek; terlalu besar →
+  model "terlalu tumpul" (underfit). Lihat kurva.
+- **Dropout rate**: mulai `0.2–0.5` untuk lapisan tersembunyi. Terlalu tinggi → model
+  sulit belajar di data kecil.
+- Aturan: ubah **satu demi satu**, pantau val — seperti tuning hyperparameter di Bab 4.
+
+### Perbandingan kode lengkap (Kode 5.2 & 5.3 dipakai bersama)
+
+Kode 5.1–5.2 menunjukkan pola; dalam notebook `ch-05-04_metrik_walkforward.ipynb`,
+`build_model(reg=True, drop=0.3)` menggabungkan L2 + dropout dan dibandingkan dengan
+versi tanpa regularisasi pada learning curve serta metrik test — latihan benarnya di
+§5.8.
+
 ## 5.4 Memilih Metrik Operasional yang Tepat
 
 Sekarang kita masuk bagian yang paling membedakan buku ini dengan buku ML umum: **metrik
@@ -213,6 +230,33 @@ Sebagai referensi dasar evaluasi & praktik model pada umumnya, lihat pula [2].
 | Menilai kesesuaian pola secara luas | R² / KGE |
 | Data dengan skala & bias sering dibahas (hidrologi) | KGE / Willmott |
 | Standar laporan operasional meteo | MAE + RMSE (keduanya) |
+
+### Bahasa setiap metrik dalam satu kalimat
+
+- **MAE**: "rata-rata, sejauh apa prediksi meleset?" (dalam satuan asli).
+- **RMSE**: "seberapa besar galat ekstrem ikut berbobot?" (akar kuadrat rata-rata).
+- **R²**: "berapa persen variasi data bisa dijelaskan model?" (0–1; bisa negatif).
+- **Willmott d**: "seberapa dekat prediksi ke aktual dalam skala 0–1 yang 'ramah'
+  terhadap pencilan" — sering digunakan pada laporan hidrologi Indonesia.
+- **KGE**: "seberapa baik model menangkap korelasi, tanpa bias, dan variabilitas
+  sekaligus?" (terurai oleh Gupta et al., 2009 [4]).
+
+KGE dirumuskan lewat tiga komponen: korelasi (`r`), bias rasio, dan rasio variabilitas;
+nilai `1` = sempurna, `0` = setara rata-rata, negatif = buruk. Konteks ini membuat
+rekomendasi pemilihan di Tabel 5.2 menjadi masuk akal.
+
+### Contoh ukuran cepat untuk memahami skala metrik
+
+Untuk data uji dengan `y = [10, 20, 30]` dan prediksi `ŷ = [12, 19, 29]`:
+
+- MAE = `(2+1+1)/3 = 1.33`
+- RMSE ≈ `√((4+1+1)/3) ≈ 1.41`
+- R² ≈ `0.98` (sangat baik secara pola)
+- Willmott d ≈ `0.99`
+- (KGE perlu varian pred/obs; dihitung di notebook)
+
+Bandingkan cerita: MAE/RMSE memberi ukuran fisik, R²/d memberi kualitas pola — keduanya
+dilaporkan bergantian sesuai tujuan.
 
 ### Untuk klasifikasi / kejadian langka
 
@@ -281,7 +325,7 @@ window*), yang mensimulasikan penggunaan operasional:
 | 4 | t1–t160 | t161–t180 | |
 | 5 | t1–t180 | t181–t200 | |
 
-Pada Tabel 5.4, latih selalu **hanya masa lalu**; validasi selalu **di depan** batas latih.
+Pada Tabel 5.5, latih selalu **hanya masa lalu**; validasi selalu **di depan** batas latih.
 Ini mereplikasi kondisi nyata: saat model dipakai, ia hanya tahu data hingga hari ini.
 
 **Kode 5.3 — Contoh walk-forward sederhana (pseudo; lengkap di notebook).**
@@ -317,13 +361,23 @@ potong deret menjadi blok berurutan, lalu untuk tiap fold latih blok-blok sebelu
 validasi tersebut (tanpa melihat masa depan). Ini "saudara" walk-forward dengan jumlah
 fold tetap. Intinya tetap sama: **validasi selalu mengikuti waktu**, bukan kebalikannya.
 
-## 5.6 Menerapkan Evaluasi: Alur Lengkap
-
 ### Kapan memakai k-fold acak masih ok?
 
 Hanya jika data Anda benar-benar *i.i.d.* (misal koleksi gambar cuaca independen). Untuk
 deret waktu stasiun, pasang surut, atau hujan — **selalu** walk-forward/blocked. Ini
 aturan yang akan dipakai keras di Bab 8–9.
+
+### Kesalahan umum saat walk-forward
+
+1. **Berbagi preprocessing statistik antar fold** — jika Anda menghitung normalisasi
+   (min/max/z-score) dari seluruh data sebelum membagi fold, masa depan "bocor" ke latih.
+   Solusi: hitung statistik **hanya dari fold latih**, lalu terapkan ke validasi-fold
+   (Bab 6 memperdalam).
+2. **Memakai model yang di-fit sekali untuk semua fold** — setiap fold harus punya model
+   sendiri yang dilatih hanya dengan data sebelum fold tersebut (Kode 5.3).
+3. **Menghitung metrik pada campuran semua fold** — laporkan per-fold atau rata-rata;
+   jangan mengumpulkan prediksi semua fold menjadi satu set (karena fold awal dan akhir
+   tidak sebanding).
 
 ## 5.6 Menerapkan Evaluasi: Alur Lengkap
 
@@ -340,7 +394,94 @@ Untuk menutup Bab 5, rangkum evaluasi yang jujur dalam urutan:
 Langkah 5–6 adalah "izin keluar" sebelum klaim apa pun: jangan pernah melaporkan
 "prediksi akurat 97%" tanpa metrik yang sesuai konteks (KGE/CSI, bukan akurasi dangkal).
 
-## 5.7 Latihan
+### Analisis residu: melihat di mana model gagal
+
+Metrik memberi satu angka; **residu** (selisih aktual−prediksi) menunjukkan *di mana*.
+Cara diagnostik sederhana yang sering mengungkap masalah:
+
+- **Plot residu terhadap waktu** — apakah ada musim atau bulan yang selalu meleset?
+  (mis. model buruk di puncak hujan karena data tidak seimbang.)
+- **Plot residu terhadap fitur penting** — misal, apakah error membesar ketika kelembapan
+  sangat tinggi?
+- **Distribusi residu** — residu yang condong kuat (skew) menandakan model bias
+  sistematis (misal selalu memprediksi terlalu rendah pada hujan besar).
+
+Analisis residu hampir selalu menghasilkan ide perbaikan: fitur baru, transformasi target
+(mis. `log(y+1)` untuk hujan), atau threshold yang lebih sesuai. Inilah "analisis
+kesalahan" yang disebut di Bab 4 — dan merupakan keterampilan paling berharga seorang
+praktisi model cuaca.
+
+### Kapan sebuah model "lulus"?
+
+Tidak ada formulasi tunggal; kerangka penilaian:
+
+1. **Lulus teknis** — metrik sesuai target & mengalahkan baseline di walk-forward.
+2. **Lulus operasional** — metrik memenuhi tolok ukur layanan (mis. toleransi pasang ±0.10 m,
+   CSI ≥ 0.4 untuk peringatan dini).
+3. **Lulus praktis** — model dapat dipelihara (data tersedia, retraining terjadwal,
+   interpretasi cukup bagi pengguna, Bab 10).
+
+Hanya ketika ketiganya terpenuhi model layak diusulkan untuk produksi. Bab 8–9 mempraktikkan
+ketiga mata uji ini pada kasus nyata.
+
+### Memilih rangkaian eksperimen yang efisien
+
+Ketika mencari perbaikan (regularisasi, kapasitas, fitur), rancang eksperimen agar
+jawabannya jelas:
+
+- **Satu perubahan per eksperimen** — ubah dropout saja, bandingkan; lalu L2, dst.
+  Mengubah banyak variabel sekaligus membuat Anda tak tahu penyebab perbedaan.
+- **Tetapkan metrik keputusan tunggal** — misal: "val MAE" untuk regresi, "CSI pada
+  periode validasi" untuk kejadian — dipakai konsisten di semua eksperimen.
+- **Catat hasil di tabel** — kolom: konfigurasi, train/val metrik, parameter. Ini menjadi
+  dokumen jejak keputusan (berguna saat laporan operasional, Bab 10).
+- **Gunakan seed tetap** (Bab 1) agar perbedaan antar eksperimen bukan karena acak.
+
+Tabel eksperimen bisa dimulai sesederhana menyalin output notebook ke satu lembar catatan;
+disiplin ini menghemat banyak waktu di Bab 8–9 ketika studi kasus menuntut banyak
+percobaan.
+
+## 5.7 Membaca Metrik Secara Kritis
+
+Angka metrik tidak berdiri sendiri. Sebelum melaporkan, tanyakan:
+
+1. **Satuan & konteks** — MAE 0.05 m untuk pasang surut baik atau buruk? Bandingkan dengan
+   toleransi operasional (mis. ±0.10 m).
+2. **Dibanding baseline?** — metrik hanya bermakna relatif terhadap persistence/klimatologi.
+3. **Metrik apa yang diukur?** — akurasi untuk fenomena langka menyesatkan; gunakan
+   CSI/POD/FAR (regresi: KGE/MAE/RMSE sesuai tujuan).
+4. **Apakah angka stabil?** — satu run bisa beruntung; gunakan beberapa seed atau
+   walk-forward untuk melihat varians.
+5. **Threshold mana?** — POD/FAR bergantung threshold; selalu laporkan threshold yang
+   dipakai.
+
+Disiplin ini — bukan sekadar "akurasi tinggi" — yang membedakan laporan yang bisa
+dipercaya di dunia operasional meteorologi.
+
+### FAQ singkat
+
+**Kapan KGE lebih baik daripada R²?** Jika Anda peduli pada bias/skala (khas hidrologi &
+peramalan), KGE memisah korelasi, bias, dan variabilitas. R² hanya korelasi-pola; model
+dengan bias besar tapi pola bagus bisa R² tinggi padahal tidak akurat.
+
+**Apakah dropout membuat model selalu lebih baik?** Tidak. Dropout menambah regularisasi —
+bagus untuk overfit, tetapi bisa memperburuk underfit. Terapkan sesuai diagnosis.
+
+**Walk-forward lebih lambat — apakah wajib?** Untuk klaim evaluasi pada data iklim, ya.
+Kecepatan bisa ditingkatkan dengan model kecil / subset; kejujuran tidak bisa dikompromi.
+
+**Apa beda CSI dan TS?** Dalam praktik peramalan, keduanya merujuk rumus yang sama;
+TS (*threat score*) adalah nama lama untuk CSI.
+
+**Mengapa metrik "nilai rata-rata" tidak cukup?** Rata-rata menyembunyikan distribusi:
+MAE 2 mm bisa berarti "selalu meleset 2 mm" atau "sempurna kecuali beberapa hari ekstrem".
+Laporkan distribusi error (kuantil, plot) bila penting.
+
+**Apakah saya perlu melaporkan semua metrik?** Tidak — pilih yang informatif untuk tujuan
+Anda (Tabel 5.2) dan sertakan baseline + threshold. Lebih baik sedikit angka yang
+bermakna daripada banyak angka yang membingungkan.
+
+## 5.8 Latihan
 
 **Soal konsep**
 
@@ -365,12 +506,19 @@ Langkah 5–6 adalah "izin keluar" sebelum klaim apa pun: jangan pernah melapork
 
 ## Ringkasan
 
-- Overfit = varian tinggi (menghafal data latih); underfit = bias tinggi (terlalu sederhana).
-- Learning curve adalah alat diagnosis utama (train vs val).
-- Regularisasi: early stopping, L2, dropout — terapkan berdasarkan diagnosis, bukan asal.
-- Metrik regresi: MAE/RMSE/R²/Willmott/KGE; metrik kejadian langka: CSI/POD/FAR (WMO).
-- Cross-validation deret waktu: walk-forward (bukan k-fold acak) — jujur & anti-leakage.
-- Bab 8–9 akan memakai semua ini pada studi kasus nyata.
+- Overfit = varian tinggi (menghafal data latih); underfit = bias tinggi (terlalu sederhana);
+  keduanya saling trade-off (bias-variance).
+- Learning curve adalah alat diagnosis utama: train terus turun + val naik → overfit;
+  keduanya tinggi & datar → underfit.
+- Regularisasi: early stopping (kapan berhenti), L2 (kecilkan bobot, Persamaan 5.1),
+  dropout (latih "ansambel" neuron acak) — terapkan berdasarkan diagnosis, bukan asal.
+- Metrik regresi: MAE (galat khas), RMSE (bobot galat ekstrem), R² (pola), Willmott (skala
+  ramah), KGE (korelasi+bias+variabilitas).
+- Metrik kejadian langka: POD (kejadian tertangkap), FAR (alarm palsu), CSI/TS (skor
+  sukses); akurasi menyesatkan.
+- Cross-validation deret waktu: walk-forward/blocked (validasi selalu setelah latih) —
+  bukan k-fold acak; jaga preprocessing per-fold agar tidak bocor.
+- Evaluasi jujur = metrik + satuan + threshold + baseline + walk-forward + analisis residu.
 
 ## References
 
