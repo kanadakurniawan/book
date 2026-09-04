@@ -46,6 +46,12 @@ function parseFrontmatter(text) {
 	return { frontmatter: out, rest: text.slice(m[0].length) };
 }
 
+function parseChapter(value) {
+	if (!value) return undefined;
+	const n = Number.parseInt(unquote(value), 10);
+	return Number.isFinite(n) && n > 0 ? n : undefined;
+}
+
 function unquote(value) {
 	const v = value?.trim() ?? '';
 	if (v.length >= 2 && ((v[0] === '"' && v[v.length - 1] === '"') || (v[0] === "'" && v[v.length - 1] === "'"))) {
@@ -93,6 +99,7 @@ for (const ch of chapterDirs) {
 	const categories = (fm.categories || '[]').replace(/^\[/, '').replace(/\]$/, '').split(',').map((s) => unquote(s.trim())).filter(Boolean);
 	const tags = (fm.tags || '[]').replace(/^\[/, '').replace(/\]$/, '').split(',').map((s) => unquote(s.trim())).filter(Boolean);
 	const allTags = [...new Set([...categories, ...tags])];
+	const bookChapter = parseChapter(fm.chapter);
 	const synced = [
 		'---',
 		`title: ${q(title)}`,
@@ -100,6 +107,7 @@ for (const ch of chapterDirs) {
 		`pubDatetime: ${fm.pubDate || '2026-01-01'}`,
 		`tags: [${allTags.map((t) => q(t)).join(', ')}]`,
 		`draft: ${draft}`,
+		...(bookChapter ? [`bookChapter: ${bookChapter}`] : []),
 		'---',
 		rewriteFigurePaths(parsed.rest, ch),
 	].join('\n');
