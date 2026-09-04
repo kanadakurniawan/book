@@ -371,6 +371,30 @@ Setelah menyelesaikan buku ini, pembaca diharapkan mampu:
    bukan klaim riset baru).
 6. **Framing jujur di kasus:** DL dibandingkan dengan baseline (persistence/ARIMA/harmonik);
    hasil dilaporkan apa adanya.
+7. **Istilah asing dicetak miring (PUEBI §18):** kata, frasa, atau istilah bahasa Inggris/
+   asing yang **belum diserap** ke dalam bahasa Indonesia ditulis dengan *huruf miring*
+   (Markdown: `*…*`). Berlaku untuk badan teks dan daftar. Acuan utama:
+   - **Wajib miring** (istilah asing yang belum diserap KBBI): *baseline*, *persistence*,
+     *climatology*, *overhype*, *overfit*, *underfit*, *overfitting*, *underfitting*,
+     *trade-off*, *end-to-end*, *time series*, *sequence model*, *sequence-to-sequence*,
+     *neural network*, *deep learning*, *machine learning*, *feature*, *loss function*,
+     *hyperparameter*, *epoch*, *batch size*, *learning rate*, *gradient descent*,
+     *backpropagation*, *callbacks*, *early stopping*, *dropout*, *seed*, *nowcasting*,
+     *downscaling*, *generative*, *chatbot*, *pipeline*, *state of the art*, *sophisticated*,
+     *fold* (pada k-fold), *leakage*, *walk-forward*, *skill score*, dst.
+   - **TIDAK miring** (nama diri / merek / istilah KBBI yang sudah diserap): TensorFlow,
+     PyTorch, Keras, NumPy, Pandas, scikit-learn, xarray, Google Colab, Python, GitHub,
+     Zenodo, DOI, ISBN, arXiv, GPU, CPU, TPU, BMKG, ERA5, ERA5-Land, BMKG, WMO, IEEE,
+     Colab, Notebook, Internet. Akronim/singkatan organisasi juga tidak miring.
+   - **Penulisan pertama** untuk istilah yang punya padanan Indonesia: pakai pola
+     "padanan Indonesia (*istilah Inggris*)" (mis. "tolok ukur (*baseline*)") dan
+     setelahnya konsisten: hanya pakai padanan Indonesia ATAU hanya istilah Inggris
+     miring, jangan dicampur dalam satu paragraf.
+   - **Di dalam blok kode, label plot, dan identifier program** TIDAK diubah menjadi
+     miring (kode adalah teks verbatim). Konsistensi miring hanya untuk badan teks
+     naratif dan daftar.
+   - **Di REGISTER.md dan outline.md** kode rujukan internal seperti "§1.6" tetap
+     dipakai apa adanya; REGISTER/outline bukan badan teks buku.
 
 ---
 
