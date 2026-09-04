@@ -21,11 +21,11 @@
 | Gambar | Gambar 1.1 | Keterkaitan AI, ML, dan DL | `figures/fig-1-1-hierarki-ai-by-chatgpt.png` | §1.1 |
 | Tabel | Tabel 1.1 | Peta aplikasi DL dalam meteorologi | — | §1.3 |
 | Tabel | Tabel 1.2 | Contoh data cuaca mini → shape tensor | — | §1.7 |
+| Tabel | Tabel 1.3 | Glosarium mini bab 1 | — | §1.12 |
 | Persamaan | — (belum ada) | | | |
-| Kode | — (belum bernomor) | Verifikasi TensorFlow/GPU; tensor `suhu_hari` | — | §1.6–1.7 |
-
-> **Catatan:** Kode Verifikasi & tensor di §1.6/1.7 belum diberi nomor (`Kode 1.1`, dst).
-> Perlu ditambahkan saat review.
+| Kode | Kode 1.1 | Verifikasi TensorFlow + GPU | — | §1.6 |
+| Kode | Kode 1.2 | Pembuatan tensor suhu_hari | — | §1.7 |
+| Kode | Kode 1.3 | Mini-challenge persistence vs klimatologis | — | §1.7b |
 
 ### Bab 2 — Regresi: Perceptron dan Jaringan Saraf
 
