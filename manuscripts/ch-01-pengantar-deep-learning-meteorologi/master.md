@@ -6,7 +6,7 @@ categories: ["Deep Learning", "Meteorologi"]
 tags: ["deep learning", "meteorologi", "tensorflow", "colab", "pengantar"]
 version: "1.3.5"
 bookDOI: "10.5281/zenodo.0000000"
-status: draft
+status: published
 chapter: 1
 book: "Pengantar Deep Learning untuk Meteorologi"
 ---
