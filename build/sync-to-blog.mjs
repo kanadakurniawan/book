@@ -8,10 +8,10 @@ const notebooksRoot = join(root, 'notebooks');
 
 function resolveBlogPostsDir() {
 	// Lokal: book/ dan site/ adalah sibling (kanadakurniawan.com/book dan .../site)
-	const sibling = join(dirname(root), 'site', 'src', 'content', 'posts');
+	const sibling = join(dirname(root), 'site', 'src', 'content', 'book');
 	if (existsSync(sibling)) return sibling;
 	// CI: book/ di-checkout ke dalam repo site (root = repo site)
-	const inside = join(root, '..', 'src', 'content', 'posts');
+	const inside = join(root, '..', 'src', 'content', 'book');
 	if (existsSync(inside)) return inside;
 	// Fallback: gunakan sibling (akan dibuat recursive)
 	return sibling;
@@ -64,6 +64,20 @@ function q(s) {
 	return JSON.stringify(s);
 }
 
+function slugifyBookId(s) {
+	return s
+		.toLowerCase()
+		.replace(/[^a-z0-9]+/g, '-')
+		.replace(/^-+|-+$/g, '');
+}
+
+function rewriteFigurePaths(body, ch) {
+	// Manuscript merujuk "figures/..." relatif ke master.md.
+	// Di blog, post flat berada di book/<bookId>/<ch>.md, sedangkan figure disalin ke
+	// book/<bookId>/<ch>/figures/... -> tulis ulang agar path benar.
+	return body.replace(/!\[([^\]]*)\]\(figures\/([^)]+)\)/g, `![$1](${ch}/figures/$2)`);
+}
+
 export function syncAll() {
 	const chapterDirs = readdirSync(manuscriptsDir, { withFileTypes: true })
 		.filter((d) => d.isDirectory() && d.name.startsWith('ch-'))
@@ -75,63 +89,71 @@ export function syncAll() {
 		return 0;
 	}
 
+	// bookId: prioritaskan frontmatter `book`, fallback ke nama folder manuscript
+	// (di-slugify: "ch-01-pengantar-deep-learning-meteorologi" -> "pengantar-deep-learning-meteorologi").
+	const resolveBookId = (fm, ch) => {
+		if (fm.book) {
+			const b = unquote(fm.book);
+			if (b) return slugifyBookId(b);
+		}
+		return ch.replace(/^ch-\d+-/, '').replace(/-/g, '-');
+	};
+
 	let count = 0;
-function rewriteFigurePaths(body, ch) {
-	// Manuscript merujuk "figures/..." relatif ke master.md.
-	// Di blog, post flat berada di posts/<ch>.md, sedangkan figure disalin ke
-	// posts/<ch>/figures/... -> tulis ulang agar path benar.
-	return body.replace(/!\[([^\]]*)\]\(figures\/([^)]+)\)/g, `![$1](${ch}/figures/$2)`);
-}
+	for (const ch of chapterDirs) {
+		const master = join(manuscriptsDir, ch, 'master.md');
+		if (!existsSync(master)) continue;
+		const raw = readFileSync(master, 'utf8');
+		const parsed = parseFrontmatter(raw);
+		if (!parsed) {
+			console.warn(`SKIP ${ch}: frontmatter YAML tidak ditemukan`);
+			continue;
+		}
+		const fm = parsed.frontmatter;
+		const draft = fm.status === 'draft';
+		const title = unquote(fm.title);
+		const description = unquote(fm.description);
+		const categories = (fm.categories || '[]').replace(/^\[/, '').replace(/\]$/, '').split(',').map((s) => unquote(s.trim())).filter(Boolean);
+		const tags = (fm.tags || '[]').replace(/^\[/, '').replace(/\]$/, '').split(',').map((s) => unquote(s.trim())).filter(Boolean);
+		const allTags = [...new Set([...categories, ...tags])];
+		const chapter = parseChapter(fm.chapter);
+		const bookId = resolveBookId(fm, ch);
 
-for (const ch of chapterDirs) {
-	const master = join(manuscriptsDir, ch, 'master.md');
-	if (!existsSync(master)) continue;
-	const raw = readFileSync(master, 'utf8');
-	const parsed = parseFrontmatter(raw);
-	if (!parsed) {
-		console.warn(`SKIP ${ch}: frontmatter YAML tidak ditemukan`);
-		continue;
-	}
-	const fm = parsed.frontmatter;
-	const draft = fm.status === 'draft';
-	const title = unquote(fm.title);
-	const description = unquote(fm.description);
-	const categories = (fm.categories || '[]').replace(/^\[/, '').replace(/\]$/, '').split(',').map((s) => unquote(s.trim())).filter(Boolean);
-	const tags = (fm.tags || '[]').replace(/^\[/, '').replace(/\]$/, '').split(',').map((s) => unquote(s.trim())).filter(Boolean);
-	const allTags = [...new Set([...categories, ...tags])];
-	const bookChapter = parseChapter(fm.chapter);
-	const synced = [
-		'---',
-		`title: ${q(title)}`,
-		`description: ${q(description)}`,
-		`pubDatetime: ${fm.pubDate || '2026-01-01'}`,
-		`tags: [${allTags.map((t) => q(t)).join(', ')}]`,
-		`draft: ${draft}`,
-		...(bookChapter ? [`bookChapter: ${bookChapter}`] : []),
-		'---',
-		rewriteFigurePaths(parsed.rest, ch),
-	].join('\n');
+		const synced = [
+			'---',
+			`title: ${q(title)}`,
+			`description: ${q(description)}`,
+			`pubDatetime: ${fm.pubDate || '2026-01-01'}`,
+			`tags: [${allTags.map((t) => q(t)).join(', ')}]`,
+			`draft: ${draft}`,
+			...(chapter ? [`chapter: ${chapter}`] : []),
+			`bookId: ${q(bookId)}`,
+			'---',
+			rewriteFigurePaths(parsed.rest, ch),
+		].join('\n');
 
-		const target = join(blogPostsDir, `${ch}.md`);
+		const bookDir = join(blogPostsDir, bookId);
+		mkdirSync(bookDir, { recursive: true });
+		const target = join(bookDir, `${ch}.md`);
 		writeFileSync(target, synced);
-		console.log(`  SYNC ${ch}.md -> site/src/content/posts/${ch}.md ${draft ? '(draft)' : ''}`);
+		console.log(`  SYNC ${ch}.md -> site/src/content/book/${bookId}/${ch}.md ${draft ? '(draft)' : ''}`);
 		count++;
 
 		const figuresSrc = join(manuscriptsDir, ch, 'figures');
-		const figuresDest = join(blogPostsDir, ch, 'figures');
+		const figuresDest = join(bookDir, ch, 'figures');
 		if (existsSync(figuresSrc)) {
 			copyRecursive(figuresSrc, figuresDest);
-			console.log(`  SYNC figures/${ch}/ -> site/src/content/posts/${ch}/figures/`);
+			console.log(`  SYNC figures/${ch}/ -> site/src/content/book/${bookId}/${ch}/figures/`);
 		}
 
 		if (existsSync(notebooksRoot)) {
 			const prefix = (ch.match(/^ch-\d+/) || [ch])[0] + '-';
 			const files = readdirSync(notebooksRoot).filter((f) => f.startsWith(prefix));
 			if (files.length > 0) {
-				const notebooksDest = join(blogPostsDir, ch, 'notebooks');
+				const notebooksDest = join(bookDir, ch, 'notebooks');
 				mkdirSync(notebooksDest, { recursive: true });
 				for (const f of files) copyFileSync(join(notebooksRoot, f), join(notebooksDest, f));
-				console.log(`  SYNC notebooks/${ch}/ -> site/src/content/posts/${ch}/notebooks/`);
+				console.log(`  SYNC notebooks/${ch}/ -> site/src/content/book/${bookId}/${ch}/notebooks/`);
 			}
 		}
 	}
