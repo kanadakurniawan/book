@@ -1,10 +1,10 @@
-﻿---
+---
 title: "Pengantar Deep Learning untuk Meteorologi"
 description: "Bab pertama, memahami posisi deep learning dalam machine learning dan kebumian, peta aplikasi meteo yang dibahas di buku ini, kapan DL layak dipakai, serta panduan menyiapkan lingkungan Google Colab + TensorFlow."
 pubDate: 2026-09-01
 categories: ["Deep Learning", "Meteorologi"]
 tags: ["deep learning", "meteorologi", "tensorflow", "colab", "pengantar"]
-version: "1.2.1"
+version: "1.3.0"
 bookDOI: "10.5281/zenodo.0000000"
 status: published
 chapter: 1
@@ -242,22 +242,25 @@ mereka menentukan kapan deep learning benar-benar dibutuhkan dan kapan model sed
 sudah cukup.
 
 **1. Variabilitas tinggi dan rezim ganda.** Curah hujan di Indonesia dipengaruhi
-monselensi Australia–Asia, *Madden–Julian Oscillation* (MJO), *El Niño–Southern
+monselensi Australia–Asia, *Madden–Julian Oscillation* (MJO) [8], *El Niño–Southern
 Oscillation* (ENSO), dan siklus diurnal laut–darat. Pola yang sama bisa muncul dengan
 amplitudo sangat berbeda antara musim kemarau dan musim hujan. Model yang belajar dari
 satu rezim saja akan gagal saat rezim berganti, Bab 6 membahas bagaimana membagi dan
 menyeimbangkan data sehingga model tidak "lupa" pada satu musim.
 
 **2. Ekor kanan (*right tail*) yang berat pada curah hujan.** Distribusi hujan harian
-di sebagian besar stasiun BMKG memiliki banyak hari tanpa hujan (nol) dan sedikit hari
-dengan hujan ekstrem (>50 mm/hari). Ini membuat metrik rata-rata seperti RMSE tidak
+di sebagian besar wilayah Indonesia memiliki banyak hari tanpa hujan (nol) dan sedikit
+hari dengan hujan ekstrem (>50 mm/hari), dengan ekor distribusi yang lebih berat
+daripada distribusi Gaussian [9]. Ini membuat metrik rata-rata seperti RMSE tidak
 cukup; Bab 5 memperkenalkan metrik kejadian (CSI, FAR, POD) untuk menilai performa
 pada hari ekstrem.
 
-**3. Data hilang, outlier, dan inhomogenitas.** Jaringan pengamatan BMKG berkembang
-bertahap: beberapa stasiun memiliki catatan >50 tahun, sebagian lain baru beberapa
-dekade. Sensor dapat diganti, kalibrasi ulang dilakukan, atau catatan digital dihitung
-ulang. Bab 6 membahas imputasi dasar dan eksplorasi data yang hati-hati.
+**3. Data hilang, outlier, dan inhomogenitas.** Jaringan pengamatan meteorologi
+berkembang bertahap: beberapa stasiun memiliki catatan puluhan tahun, sebagian lain
+baru beberapa dekade. Sensor dapat diganti, kalibrasi ulang dilakukan, atau catatan
+digital dihitung ulang; inhomogenitas seperti ini adalah salah satu tantangan utama
+yang disoroti dalam literatur pembelajaran mesin untuk sains kebumian [7]. Bab 6
+membahas imputasi dasar dan eksplorasi data yang hati-hati.
 
 **4. Sinyal pasang surut yang kuat tetapi nonstationer.** Di Pontianak (Bab 8), sinyal
 pasang surut Kapuas memiliki komponen harmonik yang kuat (semi-diurnal, diurnal, dan
@@ -265,10 +268,11 @@ campuran) tetapi amplitudo dan fase dipengaruhi debit sungai, perubahan morfolog
 alur, dan pasang surut laut jauh. Ini menjadikannya kasus menarik untuk model sekuensial:
 pola periodik yang bisa dipelajari, dengan komponen residual yang menantang.
 
-**5. Keterbatasan data latih untuk kejadian ekstrem.** Hujan ekstrem (BBMKG Warning)
-dan pasang surut rob adalah **ekor distribusi**, persis bagian yang paling ingin
-kita prediksi dengan baik, tetapi paling jarang ada datanya. Bab 3, 5, dan 9 membahas
-cara menghadapi *class imbalance* dan verifikasi operasional untuk kejadian langka.
+**5. Keterbatasan data latih untuk kejadian ekstrem.** Hujan ekstrem (peringatan dini
+BMKG) dan pasang surut rob adalah **ekor distribusi**, persis bagian yang paling ingin
+kita prediksi dengan baik, tetapi paling jarang ada datanya [7], [9]. Bab 3, 5, dan 9
+membahas cara menghadapi *class imbalance* dan verifikasi operasional untuk kejadian
+langka.
 
 Implikasi untuk deep learning:
 
@@ -606,15 +610,15 @@ Daftar istilah singkat yang muncul di bab ini. Glosarium lengkap buku ada di
 | DL | Pembelajaran mendalam | *Deep Learning* | ML dengan jaringan saraf berlapis. |
 | NN | Jaringan saraf | *Neural Network* | Model matematis berlapis unit sederhana. |
 | Baseline | Tolok ukur | *Baseline* | Model sederhana acuan (persistence, klimatologi). |
-| Persistence |, | *Persistence* | $\hat{y}_{t+1} = y_t$; besok = hari ini. |
-| Tensor |, | *Tensor* | "Kotak angka" generalisasi matriks ke banyak dimensi. |
-| GPU |, | *Graphics Processing Unit* | Kartu grafis untuk komputasi paralel; mempercepat DL. |
+| Persistence | — | *Persistence* | $\hat{y}_{t+1} = y_t$; besok = hari ini. |
+| Tensor | — | *Tensor* | "Kotak angka" generalisasi matriks ke banyak dimensi. |
+| GPU | — | *Graphics Processing Unit* | Kartu grafis untuk komputasi paralel; mempercepat DL. |
 | Notebook | Buku catatan | *Notebook* | Dokumen interaktif kode + narasi (Colab, Jupyter). |
 | Overhype | Berlebih-lebihan | *Overhype* | Klaim model lebih bagus dari kenyataan; kita hindari. |
 | Seed | Benih | *Seed* | Nilai awal generator acak; kunci reproduksibilitas. |
-| ENSO |, | *El Niño–Southern Oscillation* | Mode variabilitas iklim Pasifik yang memengaruhi hujan Indonesia. |
-| MJO |, | *Madden–Julian Oscillation* | Osilasi intramusiman tropis (30–60 hari). |
-| Rob |, | *Rob* | Banjir pesisir akibat pasang tinggi (penting di Semarang, Pontianak). |
+| ENSO | — | *El Niño–Southern Oscillation* | Mode variabilitas iklim Pasifik yang memengaruhi hujan Indonesia. |
+| MJO | — | *Madden–Julian Oscillation* | Osilasi intramusiman tropis (30–60 hari) [8]. |
+| Rob | — | *Rob* | Banjir pesisir akibat pasang tinggi (penting di Semarang, Pontianak). |
 
 ## 1.13 Koneksi ke Bab Berikutnya dan Kata Kunci SEO
 
@@ -677,5 +681,11 @@ sumber, lisensi, dan kualitas, bekal penting untuk Bab 8–9.
 7. M. Reichstein et al., "Deep learning and process understanding for data-driven Earth
    system science," *Nature*, vol. 566, no. 7743, pp. 195–204, Feb. 2019,
    doi: 10.1038/s41586-019-0912-1.
+8. M. C. Wheeler and H. H. Hendon, "An all-season real-time multivariate MJO index:
+   Development of an index for monitoring and prediction," *Monthly Weather Review*,
+   vol. 132, no. 8, pp. 1917–1932, Aug. 2004, doi: 10.1175/1520-0493(2004)132<1917:AARMMI>2.0.CO;2.
+9. S. Lestari, A. King, C. Vincent, D. Karoly, and A. Protat, "Seasonal dependence of
+   rainfall extremes in and around Jakarta, Indonesia," *Weather and Climate Extremes*,
+   vol. 24, p. 100202, Jun. 2019, doi: 10.1016/j.wace.2019.100202.
 
 

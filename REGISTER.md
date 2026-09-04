@@ -89,6 +89,8 @@
 | [5] | `rosenblatt1958perceptron` | Artikel | 10.1037/h0042519 | ✅ |
 | [6] | `abadi2016tensorflow` | Software/arXiv | arXiv:1603.04467 | ✅ |
 | [7] | `reichstein2019deep` | Artikel | 10.1038/s41586-019-0912-1 | ✅ |
+| [8] | `wheeler2004rmm` | Artikel | 10.1175/1520-0493(2004)132<1917:AARMMI>2.0.CO;2 | ✅ |
+| [9] | `lestari2019jakarta` | Artikel | 10.1016/j.wace.2019.100202 | ✅ |
 
 ### Bab 2 — Regresi
 
