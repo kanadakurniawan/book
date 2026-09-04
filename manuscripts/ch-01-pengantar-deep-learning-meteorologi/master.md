@@ -4,7 +4,7 @@ description: "Bab pertama, memahami posisi deep learning dalam machine learning 
 pubDate: 2026-09-01
 categories: ["Deep Learning", "Meteorologi"]
 tags: ["deep learning", "meteorologi", "tensorflow", "colab", "pengantar"]
-version: "1.3.3"
+version: "1.3.4"
 bookDOI: "10.5281/zenodo.0000000"
 status: published
 chapter: 1
@@ -17,7 +17,7 @@ contoh-contoh yang dekat dengan dunia meteorologi Indonesia.
 
 > **Prasyarat bab ini:** tidak ada, ini titik awal. Bab berikutnya mengasumsikan
 > Bab 1 dikuasai. Jika Anda sudah terbiasa dengan dasar TensorFlow, Anda boleh
-> melompat ke Bab 2, tetapi baca §1.6–1.8 untuk memahami notasi yang dipakai buku ini.
+> melompat ke Bab 2, tetapi baca Bagian 1.6–1.8 untuk memahami notasi yang dipakai buku ini.
 
 ## 1.0 Mengapa Buku Ini, dan Mengapa Sekarang untuk Pembaca Indonesia
 
@@ -113,7 +113,7 @@ Kapan Anda memakai yang mana? Aturan praktisnya:
   non-linear, deep learning biasanya unggul, tetapi butuh komputasi.
 
 Perbandingan ini bukan hitam-putih. Banyak sistem produksi menggabungkan keduanya; yang
-penting adalah memahami trade-off (kita bahas dalam §1.4).
+penting adalah memahami trade-off (kita bahas dalam Bagian 1.4).
 
 ## 1.2 Mengapa Deep Learning Relevan Sekarang
 
@@ -527,7 +527,7 @@ layak dicoba (asumsikan data tersedia cukup):
 3. **Klasifikasi multi-kelas** (tiga level). DL bisa; pastikan metrik sesuai kejadian
    ekstrem, Bab 3, 5.
 4. **Regresi** (satu angka), tapi mungkin lebih baik menggunakan rata-rata klimatologis
-   sebagai baseline dulu. DL tidak selalu jawaban, §1.4.
+   sebagai baseline dulu. DL tidak selalu jawaban, Bagian 1.4.
 
 Latihan semacam ini (yang muncul di setiap bab) melatih Anda berpikir seperti praktisi:
 definisikan masalah dulu, baru pilih alat.
@@ -592,7 +592,7 @@ Di samping buku ini, berikut ekosistem yang bermanfaat:
 - **PyTorch**, alternatif populer di riset; konsep yang Anda pelajari di sini mudah
   dipindahkan.
 - **Pandas & xarray**, untuk penanganan data tabular dan data NetCDF (Bab 6).
-- **Google Colab**, lingkungan eksekusi gratis ber-GPU (bagian §1.6).
+- **Google Colab**, lingkungan eksekusi gratis ber-GPU (Bagian 1.6).
 - **Kaggle / GitHub**, sumber dataset dan contoh notebook untuk latihan mandiri.
 
 ### Pertanyaan yang Sering Muncul (FAQ)

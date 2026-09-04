@@ -4,7 +4,7 @@ description: "Bab 3 — membangun model klasifikasi biner dan multi-kelas untuk 
 pubDate: 2026-09-01
 categories: ["Deep Learning", "Meteorologi"]
 tags: ["klasifikasi", "hujan", "sigmoid", "softmax", "class imbalance", "precision", "recall"]
-version: "1.0.0"
+version: "1.0.1"
 bookDOI: "10.5281/zenodo.0000000"
 status: draft
 chapter: 3
@@ -51,7 +51,7 @@ dua kelas berdasarkan ambang [2].
 Mengapa kita perlu probabilitas, bukan sekadar label? Karena informasi **seberapa yakin**
 model sangat berharga di operasional. Dua model yang sama-sama memprediksi "hujan"
 tidaklah setara jika yang satu yakin 90% dan yang lain 51%. Probabilitas memberi kita
-ruang untuk menetapkan ambang keputusan yang sesuai risiko — topik §3.7.
+ruang untuk menetapkan ambang keputusan yang sesuai risiko, topik Bagian 3.7.
 
 ### Regresi vs klasifikasi: tabel perbandingan
 
@@ -89,7 +89,7 @@ Gambar 3.1 memperlihatkan kurva *S* khas sigmoid: mulus, monoton naik, dan teram
 
 Aturan ambang (threshold) standar adalah 0.5: jika `σ(z) ≥ 0.5`, prediksi kelas `1`;
 selain itu kelas `0`. Namun threshold ini **tidak wajib** — untuk fenomena jarang seperti
-hujan lebat, kita sering menaikkan/menurunkan threshold (dibahas §3.7).
+hujan lebat, kita sering menaikkan/menurunkan threshold (dibahas Bagian 3.7).
 
 ### Contoh numerik sigmoid
 
@@ -286,7 +286,7 @@ operasional dikeluarkan WMO [4]. Di bab ini kita cukup paham mengapa akurasi tid
 ### Empat cara mengatasi imbalance (pratinjau)
 
 1. **Gunakan metrik yang tepat** — precision/recall/F1, bukan akurasi.
-2. **Atur threshold** — turunkan ambang agar kejadian langka lebih sering tertangkap (§3.7).
+2. **Atur threshold**, turunkan ambang agar kejadian langka lebih sering tertangkap (Bagian 3.7).
 3. **Pemberian bobot kelas** — `class_weight` di Keras memberi penalti lebih besar untuk
    kesalahan pada kelas minoritas (contoh dalam notebook).
 4. **Resampling** — undersampling kelas mayoritas atau oversampling minoritas (konsekuensi:
@@ -419,7 +419,7 @@ Berdasarkan seluruh bab, alur kerja praktis untuk setiap masalah klasifikasi:
 4. **Bangun model** — MLP + ReLU, keluaran sigmoid/softmax, cross-entropy (Kode 3.1–3.2).
 5. **Evaluasi dengan metrik yang tepat** — confusion matrix, precision/recall/F1; untuk
    kejadian langka juga CSI/FAR (Bab 5).
-6. **Atur threshold** sesuai biaya (§3.7) dan tampilkan kurva PR/ROC (§3.9).
+6. **Atur threshold** sesuai biaya (Bagian 3.7) dan tampilkan kurva PR/ROC (Bagian 3.9).
 
 Baseline *klimatologi* untuk klasifikasi mengingatkan kita pada prinsip Bab 1: jangan
 impresif dengan akurasi tinggi jika kelas langka sama sekali tidak tertangkap. Kerangka

@@ -4,7 +4,7 @@ description: "Bab 2 — membangun model regresi pertama untuk prediksi besaran m
 pubDate: 2026-09-01
 categories: ["Deep Learning", "Meteorologi"]
 tags: ["regresi", "neural network", "perceptron", "fungsi aktivasi", "reLU", "time series"]
-version: "1.1.0"
+version: "1.1.1"
 bookDOI: "10.5281/zenodo.0000000"
 status: draft
 chapter: 2
@@ -13,7 +13,7 @@ book: "Pengantar Deep Learning untuk Meteorologi"
 
 > **Prasyarat:** Bab 1 (tensor, konsep ML/DL). Kode memakai TensorFlow/Keras di Google
 > Colab (Bab 1: setup lingkungan). Jika Anda sudah paham regresi linear dan pernah menulis
-> `Dense` layer, Anda boleh lompat cepat ke §2.5 — tetapi pastikan Anda tahu istilah
+> `Dense` layer, Anda boleh lompat cepat ke Bagian 2.5, tetapi pastikan Anda tahu istilah
 > bobot, bias, dan fungsi aktivasi.
 
 ## Tujuan Pembelajaran
@@ -52,7 +52,7 @@ Ada jenis pertanyaan yang *terlihat* seperti angka tetapi sebenarnya bukan regre
 Misalnya "berapa hari hujan bulan depan?" — satu angka, memang, tetapi pertanyaan ini
 lebih baik diperlakukan sebagai masalah *count* atau dibentuk ulang sebagai deret waktu
 bulanan. Contoh yang jelas bukan regresi: "apakah akan berpotensi banjir?" — ini
-klasifikasi (ya/tidak). Bab 1 §1.8 sudah melatih Anda membedakan keduanya; di Bab 2 kita
+klasifikasi (ya/tidak). Bab 1 Bagian 1.8 sudah melatih Anda membedakan keduanya; di Bab 2 kita
 fokus pada regresi sungguhan.
 
 ### Contoh target regresi dalam meteorologi
@@ -68,7 +68,7 @@ fokus pada regresi sungguhan.
 
 Tabel 2.1 (diperluas di Bab 6) menunjukkan bahwa "regresi meteo" bukan satu jenis data
 yang sama: hujan berbeda jauh dari suhu. Pilihan *loss*, metrik, dan arsitektur model
-akan tergantung pada sifat ini (kita bahas di §2.6).
+akan tergantung pada sifat ini (kita bahas di Bagian 2.6).
 
 ## 2.2 Anatomi Neuron: Bobot, Bias, dan Fungsi Aktivasi
 
@@ -294,7 +294,7 @@ print(X_train.shape, X_val.shape, X_test.shape)
 ```
 
 Kode 2.2 memperlihatkan split yang **berurutan waktu**: 70% pertama untuk latih, 15%
-berikutnya validasi, 15% terakhir uji. (Pembahasan mengapa tidak acak ada di §2.7.)
+berikutnya validasi, 15% terakhir uji. (Pembahasan mengapa tidak acak ada di Bagian 2.7.)
 
 **Kode 2.3 — Compile, latih, dan evaluasi model terhadap baseline persistence.**
 
@@ -505,10 +505,10 @@ cara menghindarinya:
 mengukurnya terhadap persistence/linear. Solusi: selalu ukur baseline dulu (Bab 2.5).
 
 **2. Split acak untuk data waktu.** Memakai `train_test_split` default (acak) pada deret
-waktu menyebabkan *leakage*. Solusi: potong berurutan berdasarkan waktu (§2.7).
+waktu menyebabkan *leakage*. Solusi: potong berurutan berdasarkan waktu (Bagian 2.7).
 
 **3. Melihat data test berulang kali.** Menyetel model terhadap test sampai "jadi" adalah
-bentuk bocor. Solusi: simpan test untuk evaluasi akhir; pakai validasi untuk tuning (§2.7).
+bentuk bocor. Solusi: simpan test untuk evaluasi akhir; pakai validasi untuk tuning (Bagian 2.7).
 
 **4. Mengubah skala tanpa menyimpan statistiknya.** Jika Anda menormalisasi fitur, Anda
 harus menyimpan rata-rata/deviasi dari *train* dan menerapkannya pada *test* dan produksi.
