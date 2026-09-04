@@ -4,7 +4,7 @@ description: "Bab pertama, memahami posisi deep learning dalam machine learning 
 pubDate: 2026-09-01
 categories: ["Deep Learning", "Meteorologi"]
 tags: ["deep learning", "meteorologi", "tensorflow", "colab", "pengantar"]
-version: "1.2.0"
+version: "1.2.1"
 bookDOI: "10.5281/zenodo.0000000"
 status: published
 chapter: 1
