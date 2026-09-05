@@ -135,6 +135,49 @@
 | Kode | Kode 7.4 | LSTM multivariate | — | §7.7 |
 | Kode | Kode 7.5 | Plot forecast vs aktual | — | §7.8 |
 
+### Bab 8 — Studi Kasus: Pasang Surut Kapuas
+
+| Jenis | Nomor | Caption / isi | File | Dirujuk di § |
+|---|---|---|---|---|
+| Gambar | Gambar 8.1 | Spektrum frekuensi pasang surut (M2/K1) | `figures/fig-8-1-spektrum-pasang.png` | §8.2 |
+| Gambar | Gambar 8.2 | Prediksi vs aktual 7 hari (ilustratif) | `figures/fig-8-2-forecast-7hari.png` | §8.5 |
+| Tabel | Tabel 8.1 | Tipe pasang surut Indonesia | — | §8.2 |
+| Tabel | Tabel 8.2 | Harmonik vs machine learning | — | §8.2 |
+| Tabel | Tabel 8.3 | Ringkasan dataset pasang surut | — | §8.3 |
+| Tabel | Tabel 8.4 | Pilihan window (jam-an) | — | §8.4 |
+| Tabel | Tabel 8.5 | Contoh hasil MAE per horizon | — | §8.5 |
+| Tabel | Tabel 8.6 | Skill score relatif vs persistence | — | §8.5 |
+| Kode | Kode 8.1 | Setup & pemuatan data | — | §8.4 |
+| Kode | Kode 8.2 | Kerangka model MLP/LSTM/GRU | — | §8.4 |
+| Kode | Kode 8.3 | Simulasi pengisian gap | — | §8.6 |
+
+### Bab 9 — Studi Kasus: Curah Hujan Stasiun BMKG
+
+| Jenis | Nomor | Caption / isi | File | Dirujuk di § |
+|---|---|---|---|---|
+| Gambar | Gambar 9.1 | Precision-recall untuk hujan lebat | `figures/fig-9-1-precision-recall.png` | §9.4 |
+| Gambar | Gambar 9.2 | Verifikasi per kategori intensitas | `figures/fig-9-2-verifikasi-kategori.png` | §9.7 |
+| Tabel | Tabel 9.1 | Fitur yang dibangun untuk stasiun | — | §9.2 |
+| Tabel | Tabel 9.2 | Kategori intensitas hujan | — | §9.3 |
+| Tabel | Tabel 9.3 | Verifikasi threshold (POD/FAR/CSI) | — | §9.4 |
+| Tabel | Tabel 9.4 | Rancangan eksperimen | — | §9.5 |
+| Tabel | Tabel 9.5 | Verifikasi per kategori | — | §9.7 |
+| Persamaan | (9.1) | POD/FAR/CSI | — | §9.4 |
+| Kode | Kode 9.1 | Verifikasi CSI/POD/FAR di threshold | — | §9.4 |
+| Kode | Kode 9.2 | Permutation importance | — | §9.6 |
+| Kode | Kode 9.3 | Crosstab kategori | — | §9.7 |
+
+### Bab 10 — Operasional & Arah Riset
+
+| Jenis | Nomor | Caption / isi | File | Dirujuk di § |
+|---|---|---|---|---|
+| Gambar | Gambar 10.1 | Grafik kendali MAE (deteksi drift) | `figures/fig-10-1-control-chart.png` | §10.2 |
+| Tabel | Tabel 10.2 | Alur keputusan retraining | — | §10.3 |
+| Tabel | Tabel 10.3 | Etika pengguna | — | §10.6 |
+| Kode | Kode 10.1 | Ensembel multi-seed | — | §10.4 |
+| Kode | Kode 10.2 | Regresi kuantil | — | §10.4 |
+| Kode | Kode 10.3 | SHAP pada Keras | — | §10.5 |
+
 ---
 
 ## Bagian B — Register Sitasi
@@ -219,6 +262,45 @@
 | [5] | `cho2014gru` | Artikel (arXiv) | arXiv:1406.1078 | ✅ |
 | [6] | `sutskever2014seq2seq` | Artikel (NeurIPS) | arXiv:1409.3215 | ✅ |
 | [7] | `abadi2016tensorflow` | Software/arXiv | arXiv:1603.04467 | ✅ |
+
+### Bab 8 — Studi Kasus Pasang Surut Kapuas
+
+| `[n]` | Key `refs.bib` | Jenis | DOI / ISBN / arXiv | Status |
+|---|---|---|---|---|
+| [1] | `rob_kalbar` | Web (BIG) | URL tides.big.go.id | ✅ |
+| [2] | `big_tides` | Web (BIG) | URL tides.big.go.id | ✅ |
+| [3] | `psmsl` | Web (PSMSL) | URL psmsl.org | ✅ |
+| [4] | `pugh2014sealevel` | Buku | (Cambridge Univ. Press) | ✅ |
+| [5] | `goodfellow2016deep` | Buku | (MIT Press) | ✅ |
+| [6] | `hyndman2021fpp3` | Buku (open) | otexts.com/fpp3 | ✅ |
+| [7] | `wmo2018verification` | Tech report (WMO) | (pdf WMO) | ✅ |
+| [8] | `abadi2016tensorflow` | Software/arXiv | arXiv:1603.04467 | ✅ |
+
+### Bab 9 — Studi Kasus Curah Hujan BMKG
+
+| `[n]` | Key `refs.bib` | Jenis | DOI / ISBN / arXiv | Status |
+|---|---|---|---|---|
+| [1] | `bmkg_dataonline` | Web (BMKG) | URL dataonline.bmkg.go.id | ✅ |
+| [2] | `c3s_era5` | Web (C3S) | URL cds.climate.copernicus.eu | ✅ |
+| [3] | `hersbach2020era5` | Artikel | 10.1002/qj.3803 | ✅ |
+| [4] | `wheeler2004rmm` | Artikel | 10.1175/1520-0493(2004)132<1917:AARMMI>2.0.CO;2 | ✅ |
+| [5] | `wolter1998mei` | Prosiding | (17th Climate Diagnostics) | ✅ |
+| [6] | `wmo2018verification` | Tech report (WMO) | (pdf WMO) | ✅ |
+| [7] | `hyndman2021fpp3` | Buku (open) | otexts.com/fpp3 | ✅ |
+| [8] | `abadi2016tensorflow` | Software/arXiv | arXiv:1603.04467 | ✅ |
+
+### Bab 10 — Operasional & Arah Riset
+
+| `[n]` | Key `refs.bib` | Jenis | DOI / ISBN / arXiv | Status |
+|---|---|---|---|---|
+| [1] | `goodfellow2016deep` | Buku | (MIT Press) | ✅ |
+| [2] | `hyndman2021fpp3` | Buku (open) | otexts.com/fpp3 | ✅ |
+| [3] | `wmo2018verification` | Tech report (WMO) | (pdf WMO) | ✅ |
+| [4] | `gal2016dropout` | Artikel (ICML) | arXiv:1506.02142 | ✅ |
+| [5] | `lundberg2017shap` | Artikel (NeurIPS) | arXiv:1705.07874 | ✅ |
+| [6] | `rasp2020weatherbench` | Artikel | 10.1029/2020MS002203 | ✅ |
+| [7] | `reichstein2019deep` | Artikel | 10.1038/s41586-019-0912-1 | ✅ |
+| [8] | `abadi2016tensorflow` | Software/arXiv | arXiv:1603.04467 | ✅ |
 
 ---
 
