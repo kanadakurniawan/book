@@ -1,17 +1,17 @@
 ---
-title: "Studi Kasus: Prediksi Pasang Surut di Perairan Kapuas (Pontianak)"
-description: "Bab 8 — proyek end-to-end pertama: prediksi pasang surut di perairan Kapuas, Pontianak. Menggabungkan konteks lokal (banjir rob, kota rendah), data nyata (PSMSL/BIG), pipeline Bab 7 (baseline vs MLP vs LSTM/GRU), walk-forward, dan evaluasi MAE/RMSE terhadap toleransi tinggi pasang."
+title: "Studi Kasus: Prediksi Pasang Surut di Perairan Indonesia (Contoh Cilacap)"
+description: "Bab 8 — proyek end-to-end pertama: prediksi pasang surut di perairan Indonesia dengan studi kasus Cilacap (GLOSS #291). Latar belakang banjir rob pesisir, data nyata (IOC/UHSLC/PSMSL), pipeline Bab 7 (baseline vs MLP vs LSTM/GRU), walk-forward, dan evaluasi MAE/RMSE terhadap toleransi tinggi pasang."
 pubDate: 2026-09-01
 categories: ["Deep Learning", "Meteorologi", "Oseanografi"]
-tags: ["pasang surut", "kapuas", "pontianak", "LSTM", "banjir rob", "PSMSL", "walk-forward", "studi kasus"]
-version: "1.0.0"
+tags: ["pasang surut", "LSTM", "banjir rob", "IOC", "UHSLC", "PSMSL", "cilacap", "walk-forward", "studi kasus"]
+version: "1.1.0"
 bookDOI: "10.5281/zenodo.0000000"
 status: draft
 chapter: 8
 book: "Pengantar Deep Learning untuk Meteorologi"
 ---
 
-# Bab 8 — Studi Kasus: Prediksi Pasang Surut di Perairan Kapuas (Pontianak)
+# Bab 8 — Studi Kasus: Prediksi Pasang Surut di Perairan Indonesia (Contoh Cilacap)
 
 > **Prasyarat:** Bab 2 (regresi, baseline), Bab 5 (metrik, walk-forward), Bab 6 (data,
 > normalisasi, split), Bab 7 (LSTM/GRU, windowing, multi-horizon). Bab ini adalah
@@ -21,30 +21,49 @@ book: "Pengantar Deep Learning untuk Meteorologi"
 
 Setelah menyelesaikan bab ini, Anda diharapkan mampu:
 
-1. **Menjalankan** proyek end-to-end prediksi pasang surut Kapuas dari data nyata
-   (PSMSL/BIG/IOC).
+1. **Menjalankan** proyek end-to-end prediksi pasang surut dari data terbuka
+   (IOC/UHSLC/PSMSL), dengan Cilacap sebagai contoh reproducible.
 2. **Menerapkan** pipeline Bab 7 (baseline persistence vs MLP vs LSTM/GRU) dengan
    walk-forward.
 3. **Mengevaluasi** MAE/RMSE terhadap toleransi tinggi pasang dan memplot prediksi
    1–7 hari.
 4. **Menjelaskan** framing jujur: machine learning untuk prakiraan cepat dan pengisian
    gap data, bukan klaim riset baru.
+5. **Mengenali** keterbukaan data pasang surut per lokasi: memilih station dengan
+   data terbuka yang paling representatif, atau memetakan strategi fallback ketika
+   lokasi studi tidak punya tide gauge terbuka.
 
-## 8.1 Konteks Lokal: Mengapa Kapuas?
+## 8.1 Konteks Lokal: Perairan Indonesia dan Mengapa Cilacap
 
-Pontianak, ibu kota Kalimantan Barat, berada di delta Sungai Kapuas — kota yang
-sebagian besar wilayahnya **rendah dan berawa-rawa**. Kombinasi ini membuat Pontianak
-rentan terhadap **banjir rob**: naiknya air laut yang masuk ke daratan, terutama saat
-pasang tinggi bersamaan dengan debit Sungai Kapuas yang besar [1].
+Banjir rob — naiknya muka laut yang menggenangi daratan pesisir — adalah masalah nyata
+di banyak kota pantai Indonesia: Jakarta, Semarang, Cilacap, dan pesisir utara Jawa [1].
+Di kota-kota yang **rendah dan padat**, satu pasang tinggi yang bertepatan dengan debit
+sungai besar atau *storm surge* dapat menggenangi permukiman, mengganggu pelabuhan,
+dan memutuskan aktivitas ekonomi. Prakiraan tinggi air yang andal membantu peringatan
+dini dan keputusan operasional.
 
-Tiga alasan memilih Kapuas sebagai studi kasus:
+### Mengapa Cilacap sebagai contoh studi kasus
 
-1. **Relevansi praktis**: banjir rob di Pontianak berdampak pada permukiman, pelabuhan,
-   dan aktivitas ekonomi; prakiraan tinggi air yang andal membantu peringatan dini.
-2. **Data tersedia**: pengukuran muka laut & pasang surut dapat diakses dari BIG,
-   PSMSL, dan IOC [2][3].
-3. **Pola deterministik**: pasang surut sangat periodik — model sekuensial (Bab 7)
-   menunjukkan kekuatannya, dan *baseline* persistence menjadi pesaing yang jujur.
+Buku ini memilih **Cilacap** (pantai selatan Jawa Tengah, -7,75° LS, 109,02° BT) sebagai
+stasiun demonstrasi karena tiga alasan praktis:
+
+1. **Station aktif & terbuka**: Cilacap adalah salah satu tide gauge Indonesia yang
+   tercatat resmi di **GLOSS** (Global Sea Level Observing System) dengan ID **291**,
+   dan dilaporkan real-time oleh **UNESCO/IOC Sea Level Station Monitoring Facility**
+   [2]. Data historis jangka panjangnya juga tersedia di **PSMSL** [3] dan
+   **UHSLC** [4].
+2. **Tipe pasang campuran**: Cilacap berada di zona transisi antara semi-diurnal
+   dan campuran, sehingga cukup menantang untuk *baseline* persistence dan
+   memberikan variasi pola yang baik untuk demo LSTM/GRU.
+3. **Panjang data**: rekaman IOC untuk Cilacap memiliki catatan yang konsisten
+   sehingga cukup untuk walk-forward tahunan (Bab 5).
+
+Pembaca yang bekerja di **stasiun lain** (mis. Ambon GLOSS #68, Bitung GLOSS #69,
+Sibolga, Benoa GLOSS #49) dapat mengikuti pipeline identik dengan mengganti kode
+stasiun pada skrip unduh (§8.3). Tabel 8.3 merangkum station Indonesia yang datanya
+tersedia di sumber terbuka; untuk lokasi tanpa station terbuka, pilih station proksi
+dengan karakter oceanografi mirip atau gunakan model laut global (FES2014, GOT4.10)
+pada koordinat tersebut.
 
 > **Kejujuran framing:** pasang surut telah diprakirakan selama berpuluh tahun dengan
 > **analisis harmonik** klasik (metode berusia lama yang memodelkan konstituen
@@ -66,18 +85,21 @@ bukan sekadar "model lagi". Di sini pembaca akan mengalami:
    itu adalah pelajaran penting.
 4. **Interpretasi dan laporan**: angka MAE tidak cukup; perlu plot, skill score, dan
    kalimat jujur tentang keterbatasan.
+5. **Pemilihan station**: ketika lokasi Anda tidak punya station terbuka, Anda
+   belajar memilih proksi dan menjelaskan keterbatasannya — keterampilan yang
+   sama pentingnya dengan membangun model.
 
 Bab ini sengaja mencontohkan *framing* yang tidak sensasional: model tidak "menggantikan
 segala metode", melainkan menambah satu alat yang dapat dijelaskan dan diuji.
 
 ## 8.2 Karakter Pasang Surut di Perairan Indonesia
 
-Pasang surut di perairan Indonesia dikelompokkan menjadi tiga tipe utama [4]:
+Pasang surut di perairan Indonesia dikelompokkan menjadi tiga tipe utama [5]:
 
 - **Semi-diurnal**: dua kali pasang dan dua kali surut per hari (mis. sebagian
   Selat Malaka, Laut Cina Selatan).
-- **Diurnal**: satu kali pasang dan satu kali surut per hari (mis. perairan selatan
-  Kalimantan sampai Papua).
+- **Diurnal**: satu kali pasang dan satu kali surut per hari (mis. sebagian
+  pesisir Indonesia timur, Papua).
 - **Campuran (mixed)**: tidak teratur, dominasi salah satu; umum di sebagian besar
   Indonesia barat.
 
@@ -86,23 +108,27 @@ Pasang surut di perairan Indonesia dikelompokkan menjadi tiga tipe utama [4]:
 | Tipe | Siklus per hari | Daerah contoh | Konsekuensi prediksi |
 |---|---|---|---|
 | Semi-diurnal | 2 pasang + 2 surut | Selat Malaka, Natuna | Siklus ~12,42 jam |
-| Diurnal | 1 pasang + 1 surut | Selatan Kalimantan | Siklus ~24,84 jam |
+| Diurnal | 1 pasang + 1 surut | Pesisir Indonesia timur | Siklus ~24,84 jam |
 | Campuran | tidak teratur | Sebagian besar Indonesia barat | Kombinasi komponen |
 
-Kapuas/Pontianak termasuk kategori campuran dengan komponen kuat. Jika ingin tahu tipe
-stasiun Anda, cara cepat: hitung *Formzahl* `F = (K1 + O1)/(M2 + S2)` dari komponen
-harmonik [4] — `F < 0.25` semi-diurnal, `0.25–1.5` campuran dominan semi, `> 3` diurnal.
-Untuk pengguna machine learning, pembacaan spektrum deret (FFT) cukup untuk melihat
-periode dominan (Gambar 8.1).
+Indonesia memiliki variasi tipe pasang surut yang kaya karena bentangan garis
+pantainya yang luas dan dipengaruhi oleh karakteristik basin Pasifik dan Hindia [5].
+Untuk station demo Cilacap, pola yang akan pembaca temui adalah **campuran
+condong semi-diurnal** dengan komponen diurnal cukup kuat (terutama saat musim
+tertentu) — khas pesisir selatan Jawa. Jika ingin tahu tipe station Anda, cara
+cepat: hitung *Formzahl* `F = (K1 + O1)/(M2 + S2)` dari komponen harmonik [5] —
+`F < 0,25` semi-diurnal, `0,25–1,5` campuran, `1,5–3,0` campuran condong diurnal,
+`> 3` diurnal. Untuk pengguna machine learning, pembacaan spektrum deret (FFT)
+cukup untuk melihat periode dominan (Gambar 8.1).
 
 ![Gambar 8.1 — Spektrum frekuensi tinggi muka air: puncak pada periode pasang surut (semi-diurnal ~12,42 jam dan diurnal ~24 jam)](figures/fig-8-1-spektrum-pasang.png)
 
 Metode harmonik (tradisional) memodelkan `y(t)` sebagai jumlahan sinusoid dengan
-frekuensi tetap dari konstituen astronomis (M2, S2, K1, O1, …) [4]. Machine learning
+frekuensi tetap dari konstituen astronomis (M2, S2, K1, O1, …) [5]. Machine learning
 tidak "tahu" konstituen ini — ia belajar periodisitas dari data. Inilah beda yang perlu
 dipahami pembaca: harmonik memakai teori fisis; deep learning memakai data. Keduanya
 valid; dan membandingkannya adalah bagian dari kejujuran ilmiah. Kerangka teori model
-deep learning secara umum dapat dirujuk pada [5]; kerangka *forecasting* praktis pada [6].
+deep learning secara umum dapat dirujuk pada [6]; kerangka *forecasting* praktis pada [7].
 
 ### Model harmonik: mengapa masih relevan
 
@@ -115,7 +141,7 @@ yang stabil.
 
 Namun harmonik juga punya kelemahan: ia mengasumsikan stasioneritas amplitudo/fase dalam
 jendela estimasi, dan gagal menangkap **variabilitas non-periodik** — misalnya kenaikan
-muka air saat badai, efek debit sungai Kapuas, atau perubahan lokal ([8] untuk catatan
+muka air saat badai, efek debit sungai Kapuas, atau perubahan lokal ([5] untuk catatan
 umum pengembangan). Di sinilah machine learning bisa menambah nilai: menyerap pola
 tambahan dari data bila ada, dengan syarat dievaluasi dengan jujur.
 
@@ -136,36 +162,95 @@ Membaca Tabel 8.2 membantu memilih: untuk prakiraan rutin jangka panjang, harmon
 tetap andal; untuk pemodelan cepat dan pengisian gap pada data yang "tidak murni
 astronomis", machine learning praktis.
 
-## 8.3 Dataset Pasang Surut: Sumber dan Kualitas
+## 8.3 Dataset Pasang Surut: Sumber Terbuka dan Kualitas
 
-Sumber utama data tinggi muka air:
+Untuk pembaca yang ingin mereproduksi studi kasus ini dengan data nyata, tiga sumber
+utama dipakai buku ini. Semuanya **terbuka dan gratis untuk riset/pendidikan** dengan
+atribusi (lihat catatan lisensi di bawah).
 
-- **BIG (tides.big.go.id)** — data pasang surut stasiun Indonesia [2].
-- **PSMSL (psmsl.org)** — *sea level* global, termasuk stasiun Indonesia; format RLR
-  (Revised Local Reference) [3].
-- **IOC / UNESCO** — arsip *sea level* dan metadata stasiun [3].
+### Sumber data
 
-**Yang perlu diperiksa saat mengunduh:**
+1. **UNESCO/IOC Sea Level Station Monitoring Facility** [2] — data *real-time*
+   dan *near real-time* untuk ratusan station global, termasuk 24 station di
+   Indonesia. Akses via endpoint publik:
+   ```
+   https://www.ioc-sealevelmonitoring.org/bgraph.php?code=<KODE>&output=tab&period=<HARI>
+   ```
+   Format: tab-separated, sampling 1–3 menit atau hourly. Periode maksimum per
+   request ~30 hari; untuk arsip panjang, gunakan skrip pengulangan (`scripts/
+   download_ioc.py`).
+2. **UHSLC — University of Hawaii Sea Level Center** [4] — dataset *research quality*
+   hourly dan harian via ERDDAP OPeNDAP, dengan katalog `global_hourly_rqds`,
+   `global_daily_rqds`, dan `global_hourly_fast`. Mendukung query REST
+   (mis. `global_hourly_rqds.csv?station_id=...&time>=...`) yang ramah untuk
+   pipeline Python.
+3. **PSMSL — Permanent Service for Mean Sea Level** [3] — data rata-rata MSL
+   bulanan jangka panjang (puluhan tahun) untuk 8 station Indonesia, dengan format
+   RLR (Revised Local Reference) [9] yang sudah disesuaikan untuk konsistensi
+   antar-stasiun. Cocok untuk analisis tren jangka panjang; kurang cocok untuk
+   prakiraan jangka pendek karena resolusi bulanan.
 
-1. **Kontinuitas** — data jam-an yang bergap berhari-hari; tentukan aturan gap.
-2. **Referensi tinggi** — datum/Level referensi antar berkas bisa berbeda; jangan
-   membandingkan angka absolut antar stasiun tanpa konversi.
-3. **Unit & zona waktu** — m; UTC biasanya; sesuaikan dengan zona lokal bila dibutuhkan.
-4. **Anomali** — *datum shift*, stasiun pindah, atau pembacaan sensor rusak.
+Selain itu:
 
-**Tabel 8.3** — Contoh ringkasan dataset yang dibangun.
+- **BIG (tides.big.go.id)** [1] — tabel pasut harmonik per lokasi (komponen
+  konstituen, amplitudo, fase) yang dipakai BIG untuk prakiraan operasional; tidak
+  menyediakan time-series tinggi air mentah yang mudah di-curl otomatis.
 
-| Properti | Nilai (ilustratif) |
+### Station Indonesia yang datanya tersedia di sumber terbuka
+
+Tabel di bawah merangkum station Indonesia yang datanya dapat diunduh dari IOC,
+UHSLC, atau PSMSL. Daftar ini bukan inventaris lengkap; verifikasi terkini
+sebelum eksperimen karena status station (aktif/non-aktif) berubah.
+
+**Tabel 8.3** — Station pasang surut Indonesia di sumber terbuka (Sept 2026).
+
+| Kode IOC | Nama | Lat | Lon | GLOSS | Sumber | Catatan |
+|---|---|---|---|---|---|---|
+| `cili` | Cilacap | -7,75 | 109,02 | **291** | IOC + PSMSL | Contoh studi kasus buku ini |
+| `sema` | Semarang | -6,95 | 110,42 | — | IOC | 4 sensor aktif |
+| `sura` | Surabaya | -7,21 | 112,74 | — | IOC | Pantauan GTS |
+| `koli` | Kolinamil, Jakarta | -6,10 | 106,81 | — | IOC | Pantauan GTS |
+| `beno` | Benoa (Bali) | -8,75 | 115,21 | **49** | IOC + PSMSL | Bali, operasional |
+| `pada` | Padang | -1,00 | 100,37 | **45** | IOC + PSMSL | Sumatra barat |
+| `saba` | Sabang | 5,89 | 95,32 | **347** | IOC + PSMSL | Aceh |
+| `prig` | Prigi | -8,28 | 111,73 | — | IOC + PSMSL | Jawa selatan |
+| `bitu` | Bitung | 1,43 | 125,20 | **69** | IOC + UHSLC | Sulawesi utara |
+| `ambon` | Ambon | -3,70 | 128,18 | **68** | IOC + UHSLC | Maluku |
+| `saum` | Saumlaki | -7,98 | 131,29 | — | IOC | Maluku Tenggara |
+| `lemba` | Lembar | -8,73 | 116,08 | — | IOC | Lombok |
+| (PSMSL 1752) | Sibolga II | 1,75 | 98,77 | 22 | PSMSL | Sumatra barat |
+| (PSMSL 2193) | Padang B | -1,00 | 100,37 | 45 | PSMSL | — |
+| (PSMSL 2274) | Saumlaki | -7,98 | 131,29 | — | PSMSL | — |
+
+### Yang perlu diperiksa saat mengunduh
+
+QC yang konsisten dengan Bab 6 §6.4:
+
+1. **Kontinuitas** — data jam-an bergap berhari-hari; tentukan aturan gap
+   (interpolasi linear untuk gap < 6 jam, drop untuk gap lebih panjang).
+2. **Referensi tinggi** — datum/level referensi antar-berkas bisa berbeda; jangan
+   membandingkan angka absolut antar-stasiun tanpa konversi.
+3. **Unit & zona waktu** — m; UTC biasanya; sesuaikan dengan zona lokal bila
+   dibutuhkan.
+4. **Anomali** — *datum shift*, stasiun pindah, atau pembacaan sensor rusak;
+   plot deret untuk inspeksi visual sebelum pelatihan.
+
+**Tabel 8.3a** — Contoh ringkasan dataset Cilacap yang dibangun (1 tahun hourly).
+
+| Properti | Nilai (default buku) |
 |---|---|
-| Stasiun | Pontianak/BIG (contoh) |
-| Rentang | 2015-01-01 – 2024-12-31 |
+| Stasiun | Cilacap (`code=cili`, IOC) |
+| Rentang | 1 tahun terakhir (otomatis via skrip) |
 | Interval | 1 jam (24 poin/hari) |
-| Nilai hilang | 1.8% |
-| Satuan | m (referensi lokal) |
+| Nilai hilang | ~1–3% (tergantung periode) |
+| Satuan | m (relatif terhadap station benchmark) |
+| File lokal | `data/sample/cili_1y_hourly.csv` (di-commit) |
+| File lengkap | `data/raw/cili_*.csv` (di-`.gitignore`, via skrip) |
 
-Untuk buku ini, notebook menyediakan **data contoh sintetik** yang meniru karakter
-pasang surut (supaya dapat dijalankan tanpa akses internet), disertai instruksi
-mengganti dengan data nyata dari tautan di atas. Prinsip QC mengikuti Bab 6 §6.4.
+Untuk buku ini, repo menyediakan **sampel 1 tahun hourly** (`data/sample/
+cili_1y_hourly.csv`) yang siap dipakai notebook out-of-the-box, beserta
+**skrip unduh** (`scripts/download_ioc.py`) untuk mengambil periode lebih
+panjang atau station lain. Prinsip QC mengikuti Bab 6 §6.4.
 
 ### Menangani gap dan outlier pada data pasang surut
 
@@ -259,9 +344,23 @@ Uji `w ∈ {24, 72, 168}` pada validasi, pilih yang MAE-nya konsisten.
 ```python
 import numpy as np, pandas as pd
 
-# ganti dengan muat nyata: pd.read_csv(...) atau xr.open_dataset(...)
-jp = pd.read_csv("pasang_sintetik.csv", parse_dates=["waktu"]).set_index("waktu")
-seri = jp["tinggi"] .astype(float)
+# Opsi A: data sample (1 tahun hourly Cilacap) yang sudah ada di repo.
+seri = pd.read_csv(
+    "data/sample/cili_1y_hourly.csv",
+    parse_dates=["time"],
+).set_index("time")["tinggi"].astype(float)
+
+# Opsi B: muat data nyata lengkap (hasil unduh scripts/download_ioc.py)
+# seri = pd.read_csv("data/raw/cili_hourly.csv",
+#                    parse_dates=["time"]).set_index("time")["tinggi"]
+
+# Opsi C: fallback sintetis (untuk coba cepat tanpa unduh)
+# t = pd.date_range("2024-01-01", periods=365*24, freq="h")
+# seri = (1.0 + 0.6*np.sin(2*np.pi*np.arange(len(t))/12.42)
+#         + 0.4*np.sin(2*np.pi*np.arange(len(t))/24.84)
+#         + 0.05*np.random.randn(len(t)))
+# seri = pd.Series(seri.round(3), index=t, name="tinggi")
+
 print(seri.head(), "| hilang:", int(seri.isna().sum()))
 ```
 
@@ -303,7 +402,7 @@ membaca urutan `w × f`. Ini mengingatkan kembali Bab 7 §7.7.
 Untuk pasang surut, target operasional sering dinyatakan sebagai toleransi tinggi air,
 misal **MAE ±0,10 m** sesuai kebutuhan pelabuhan/peringatan rob. Kita laporkan:
 
-- **MAE**, **RMSE** per `h` (Bab 5), mengikuti pedoman verifikasi operasional WMO [7].
+- **MAE**, **RMSE** per `h` (Bab 5), mengikuti pedoman verifikasi operasional WMO [8].
 - **Skill score** terhadap persistence (Persamaan 7.6) — jika nilai negatif, model kalah
   dari "tebak nilai kemarin".
 - **Plot prediksi vs aktual** 1, 3, 7 hari.
@@ -332,7 +431,7 @@ Satu angka MAE tidak cukup. Beri jarak dengan menghitung skill score per blok:
   jika rentang mencakup nol (atau negatif), kesimpulan "LSTM menang" belum kuat.
 
 Cara sederhana tanpa statistik rumit ini cukup untuk laporan praktis (significance detail
-di literatur [6][7]). Ini juga mencegah klaim "0,001 lebih baik!" yang sebenarnya noise.
+di literatur [6][7][8]). Ini juga mencegah klaim "0,001 lebih baik!" yang sebenarnya noise.
 
 ### Contoh hasil numerik yang "sehat"
 
@@ -374,11 +473,27 @@ Plot prediksi 7 hari (Gambar 8.2) menunjukkan kemampuan menangkap fase (kapan pa
 naik) dan amplitudo (berapa tinggi). Ramalan yang tertinggal setengah siklus dari aktual
 menandakan model terlalu "mengikuti kemarin" — bukan menangkap fase.
 
-![Gambar 8.2 — Contoh prediksi vs aktual 7 hari (data sintetik ilustratif)](figures/fig-8-2-forecast-7hari.png)
+![Gambar 8.2 — Prediksi vs aktual 7 hari terakhir, station Cilacap (data sample)](figures/fig-8-2-forecast-7hari.png)
+
+**Gambar 8.2** — Prediksi vs aktual untuk 7 hari terakhir pada station Cilacap
+(data sample `cili_1y_hourly.csv`; "prediksi" dihasilkan oleh skrip
+`scripts/generate_figures.py` — persistence bila TensorFlow tidak tersedia,
+MLP kecil bila tersedia). Garis biru = aktual; garis oranye putus-putus = prediksi.
+Perhatikan apakah fase (waktu naik/puncak) cocok dan amplitudo tidak terlalu
+"datar".
 
 Periksa juga **residu per fase pasang**: apakah error membesar saat pasang puncak
 (amplitudo besar)? Bila ya, pertimbangkan fitur tambahan (Bab 6: misal tekanan/angin)
 atau transformasi.
+
+![Gambar 8.3 — Residu per amplitudo dan fase pasang M2](figures/fig-8-3-residu.png)
+
+**Gambar 8.3** — Residu (prediksi − aktual) 7 hari terakhir. **Panel kiri**:
+residu vs amplitudo aktual — titik yang menyebar acak di sekitar garis nol
+menandakan error tidak bergantung pada amplitudo (gejala baik). **Panel kanan**:
+residu vs fase dalam siklus M2 (12,42 jam dilipat ke [0, 1)) — pola periodik
+di sini menandakan model kehilangan sebagian informasi fase (jala umum untuk
+baseline persistence; LSTM/GRU biasanya lebih baik).
 
 ### Cara membaca plot: tiga hal yang harus diperiksa
 
@@ -427,19 +542,24 @@ mask[pos:pos+24] = False
 Cara ini — memvalidasi imputasi dengan menyembunyikan data asli — adalah praktik yang
 jujur (Bab 5): kita tahu "kebenaran" yang disembunyikan dan bisa mengukur error imputasi
 tentatif. Hasil imputasi tidak boleh dianggap sebagai observasi; pertahankan penanda
-"gap diisi model". Seluruh eksperimen di bab ini berjalan di atas TensorFlow [8].
+"gap diisi model". Seluruh eksperimen di bab ini berjalan di atas TensorFlow [10].
 
 ### Keterbatasan yang harus diakui
 
-Sebagai penutup, tiga keterbatasan yang wajar diakui:
+Sebagai penutup, empat keterbatasan yang wajar diakui:
 
-1. **Data sintetik vs nyata** — notebook memakai data contoh; hasil "asli" hanya muncul
-   saat pembaca memakai data nyata. Jangan melaporkan angka sintetik sebagai hasil.
-2. **Fokus satu stasiun** — pola Pontianak belum tentu sama dengan stasiun lain;
-   tipe pasang (Tabel 8.1) harus diperiksa dulu sebelum menggeneralisasi.
-3. **Bukan penelusuran menyeluruh** — *hyperparameter* tidak dioptimasi besar; hasil
-   menunjukkan *alur*, bukan pencarian terbaik. Untuk klaim kuat, perlu eksperimen luas
-   (Bab 10).
+1. **Lokasi studi ≠ lokasi target pembaca** — Cilacap dipakai sebagai contoh
+   reproducible karena datanya terbuka; untuk lokasi tanpa station terbuka,
+   hasil Cilacap tidak langsung berlaku. Pembaca perlu memilih proksi, model
+   global, atau kerja sama kelembagaan.
+2. **Panjang data terbatas** — sample 1 tahun hourly cukup untuk walk-forward
+   4 blok dan demo pola, tetapi tidak cukup untuk tren jangka panjang atau
+   variabilitas antar-tahun. Untuk klaim kuat, perlu 3–10 tahun (Bab 10).
+3. **Fokus satu station** — pola Cilacap belum tentu sama dengan station
+   lain; tipe pasang (Tabel 8.1) harus diperiksa dulu sebelum menggeneralisasi.
+4. **Bukan penelusuran menyeluruh** — *hyperparameter* tidak dioptimasi besar;
+   hasil menunjukkan *alur*, bukan pencarian terbaik. Untuk klaim kuat, perlu
+   eksperimen luas (Bab 10).
 
 Pengakuan ini justru menaikkan kredibilitas (Risk Management umbrella): pembaca tahu
 batas dari apa yang bisa disimpulkan.
@@ -457,48 +577,67 @@ batas dari apa yang bisa disimpulkan.
 
 **Latihan praktik (notebook `ch-08-07_studi_kasus_pasang_surut.ipynb`)**
 
-5. Ganti data sintetik dengan data nyata (BIG/PSMSL) dan jalankan pipeline ulang.
+5. Ganti data sample Cilacap dengan data nyata dari `scripts/download_ioc.py` untuk
+   station Anda (atau proksi terdekat) dan jalankan pipeline ulang.
 6. Bandingkan `w ∈ {24, 72, 168}` untuk `h=24` jam; buat tabel MAE.
-7. Bandingkan LSTM vs GRU vs MLP vs persistence di *walk-forward* 6 blok; hitung skill
+7. Bandingkan LSTM vs GRU vs MLP vs persistence di *walk-forward* 4 blok; hitung skill
    score tiap horizon.
 8. Simulasikan gap 1 × 24 jam dan 1 × 72 jam; ukur MAE imputasi.
-9. (Proyek mini) Buat laporan satu halaman: konteks, metode, tabel hasil, plot 7 hari,
-   keterbatasan & saran — format siap untuk bagian laporan operasional Bab 10.
+9. (Proyek mini) Ulangi pipeline untuk station Ambon (`ambon`) atau Bitung (`bitu`);
+   bandingkan tipe pasang dan skill score dengan Cilacap.
+10. (Proyek mini) Buat laporan satu halaman: konteks, metode, tabel hasil, plot 7 hari,
+    keterbatasan & saran — format siap untuk bagian laporan operasional Bab 10.
 
 ## Ringkasan
 
-- Kapuas/Pontianak = kota rendah rawan banjir rob → prakiraan tinggi air sangat relevan;
-  konteks menentukan metrik & tolok ukur.
-- Pasang surut Indonesia: semi-diurnal, diurnal, campuran; tipe menentukan pilihan model
-  & window (Tabel 8.1).
+- Banjir rob pesisir adalah masalah nyata di banyak kota pantai Indonesia; prakiraan
+  tinggi air yang andal relevan untuk peringatan dini dan operasi pelabuhan.
+- **Cilacap** dipakai sebagai contoh studi kasus reproducible karena station-nya
+  aktif di GLOSS (#291) dan datanya terbuka via IOC/UHSLC/PSMSL. Untuk lokasi
+  tanpa station terbuka, gunakan proksi terdekat atau model global
+  (FES2014/GOT4.10).
+- Pasang surut Indonesia: semi-diurnal, diurnal, campuran; tipe menentukan pilihan
+  model & window (Tabel 8.1).
 - Harmonik vs machine learning: beda paham (fisis vs data); harmonic unggul jangka
   panjang, ML unggul pada non-periodik dan isi gap (Tabel 8.2).
-- Data: BIG/PSMSL/IOC; periksa kontinuitas, datum, unit, anomali; handling gap & outlier
-  sesuai fisis (Bab 6).
+- Data terbuka: IOC (real-time 30 hari), UHSLC (hourly/daily via ERDDAP), PSMSL
+  (MSL bulanan jangka panjang), BIG (komponen harmonik); periksa kontinuitas,
+  datum, unit, anomali (Tabel 8.3).
 - Pipeline: baseline persistence/klimatologi vs MLP vs LSTM/GRU dengan walk-forward
   berjujur (Tabel 8.4).
 - Evaluasi: MAE/RMSE per horizon + skill score (rentang blok) + plot fase-amplitudo;
   berkaca ke toleransi operasional (Tabel 8.5).
-- Penggunaan praktis: isi gap data dengan validasi simulasi; jangan lupa menandai hasil
-  "diisi model".
-- Keterbatasan diakui: data contoh, satu stasiun, tanpa optimasi hiperparameter besar.
+- Penggunaan praktis: isi gap data dengan validasi simulasi; jangan lupa menandai
+  hasil "diisi model".
+- Keterbatasan diakui: lokasi proksi ≠ target, panjang data 1 tahun cukup untuk demo
+  tapi tidak untuk klaim tren; satu station; tanpa optimasi hiperparameter besar.
 - Framing: ML sebagai alat cepat & isi gap, bukan klaim pengganti harmonik.
 
 ## References
 
-1. (Badan Informasi Geospasial dan literatur banjir rob Pontianak), "Kajian genangan rob
-   pesisir Kalimantan Barat," [Online]. Available: https://tides.big.go.id (Accessed: Sep. 2026).
-2. Badan Informasi Geospasial (BIG), "Peta pasang surut dan pola pasut perairan
-   Indonesia," [Online]. Available: https://tides.big.go.id (Accessed: Sep. 2026).
-3. Permanent Service for Mean Sea Level (PSMSL), "Global sea level data," [Online].
-   Available: https://psmsl.org (Accessed: Sep. 2026).
-4. D. T. Pugh and P. L. Woodworth, *Sea-Level Science: Understanding Tides, Surges,
-   Tsunamis and Mean Sea-Level Changes*. Cambridge, UK: Cambridge University Press, 2014.
-5. I. Goodfellow, Y. Bengio, and A. Courville, *Deep Learning*. Cambridge, MA, USA:
-   MIT Press, 2016.
-6. R. J. Hyndman and G. Athanasopoulos, *Forecasting: Principles and Practice*, 3rd ed.
-   Melbourne, Australia: OTexts, 2021. [Online]. Available: https://otexts.com/fpp3/
-7. World Meteorological Organization, "WMO guidelines on the verification of operational
-   forecasts," WMO, Geneva, Switzerland, 2018.
-8. M. Abadi et al., "TensorFlow: Large-scale machine learning on heterogeneous systems,"
-   2016. [Online]. Available: https://arxiv.org/abs/1603.04467
+1. {Badan Informasi Geospasial}, "Informasi genangan rob dan pola pasut
+   perairan Indonesia," [Online]. Available: https://tides.big.go.id
+   (diakses: September 2026).
+2. UNESCO/IOC, "Sea Level Station Monitoring Facility," [Online]. Available:
+   https://www.ioc-sealevelmonitoring.org/ (diakses: September 2026).
+3. Permanent Service for Mean Sea Level, "Global sea level data," [Online].
+   Available: https://psmsl.org (diakses: September 2026).
+4. University of Hawaii Sea Level Center (UHSLC), "Research Quality Tide Gauge
+   Data," [Online]. Available: https://uhslc.soest.hawaii.edu/data/ (diakses:
+   September 2026).
+5. D. T. Pugh and P. L. Woodworth, *Sea-Level Science: Understanding Tides,
+   Surges, Tsunamis and Mean Sea-Level Changes*. Cambridge, UK: Cambridge
+   University Press, 2014.
+6. I. Goodfellow, Y. Bengio, and A. Courville, *Deep Learning*. Cambridge, MA,
+   USA: MIT Press, 2016.
+7. R. J. Hyndman and G. Athanasopoulos, *Forecasting: Principles and Practice*,
+   3rd ed. Melbourne, Australia: OTexts, 2021. [Online]. Available:
+   https://otexts.com/fpp3/
+8. World Meteorological Organization, "WMO guidelines on the verification of
+   operational forecasts," WMO, Geneva, Switzerland, 2018.
+9. S. J. Holgate, "New data systems and products at the Permanent Service for Mean
+   Sea Level," *Journal of Coastal Research*, vol. 29, no. 3, pp. 477–479, 2013,
+   doi: 10.2112/JCOASTRES-D-12-00175.1.
+10. M. Abadi et al., "TensorFlow: Large-scale machine learning on heterogeneous
+    systems," 2016, arXiv:1603.04467. [Online]. Available:
+    https://arxiv.org/abs/1603.04467

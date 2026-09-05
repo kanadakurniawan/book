@@ -15,3 +15,10 @@ npm-debug.log*
 
 # internal brand strategy (never commit)
 brand-strategy.md
+
+# Data pasang surut mentah — diunduh via scripts/download_ioc.py
+# Sample kecil tetap di-commit agar notebook jalan out-of-the-box.
+manuscripts/*/data/raw/
+manuscripts/*/data/sample/.gitkeep
+!manuscripts/*/data/sample/*.csv
+!manuscripts/*/data/sample/*.md

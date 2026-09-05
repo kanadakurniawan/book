@@ -258,27 +258,46 @@ Setelah menyelesaikan buku ini, pembaca diharapkan mampu:
 
 ## Bagian III — Studi Kasus (Bab 8–9)
 
-### Bab 8 — Studi Kasus: Prediksi Pasang Surut di Perairan Kapuas (Pontianak)
+### Bab 8 — Studi Kasus: Prediksi Pasang Surut di Perairan Indonesia (Contoh Cilacap)
 `book/manuscripts/ch-08-studi-kasus-pasang-surut-kapuas/master.md` · ±20–28 hal
 
 - **Tujuan pembelajaran:** setelah bab ini, pembaca mampu:
-  1. Menjalankan proyek end-to-end prediksi pasang surut Kapuas dari data nyata (PSMSL/BIG/IOC).
-  2. Menerapkan pipeline Bab 7 (baseline persistence vs MLP vs LSTM/GRU) dengan walk-forward.
-  3. Mengevaluasi MAE/RMSE terhadap toleransi tinggi pasang dan memplot prediksi 1–7 hari.
-  4. Menjelaskan framing jujur: ML untuk prakiraan cepat & pengisian gap, bukan klaim riset baru.
+  1. Menjalankan proyek end-to-end prediksi pasang surut dari data terbuka
+     (IOC/UHSLC/PSMSL), dengan Cilacap sebagai contoh reproducible.
+  2. Menerapkan pipeline Bab 7 (baseline persistence vs MLP vs LSTM/GRU) dengan
+     walk-forward.
+  3. Mengevaluasi MAE/RMSE terhadap toleransi tinggi pasang dan memplot prediksi
+     1–7 hari.
+  4. Menjelaskan framing jujur: ML untuk prakiraan cepat & pengisian gap, bukan
+     klaim riset baru.
+  5. Mengenali keterbatasan ketika lokasi studi (mis. Pontianak/Kalimantan) tidak
+     memiliki tide gauge terbuka, dan memetakan strategi fallback (proksi,
+     FES2014/GOT4.10, kerja sama BIG/BRIN).
 - **Isi:**
-  1. Konteks: mengapa Kapuas/Pontianak (kota rendah berawa, banjir rob, interaksi pasang–debit
-     sungai); jenis pasang (semi-diurnal/diurnal/campuran).
-  2. **Framing jujur:** analisis harmonik untuk penjelasan, ML untuk prakiraan cepat &
-     pengisian gap data — bukan klaim riset baru.
-  3. Dataset pasang (PSMSL/BIG/IOC): sampling, gap, kualitas.
-  4. Pipeline Bab 7: baseline persistence vs MLP vs LSTM/GRU; walk-forward.
-  5. Evaluasi MAE/RMSE vs toleransi tinggi pasang; plot prediksi 1–7 hari; diskusi batas model.
-- **Reproduksibilitas:** data + notebook (GitHub/Zenodo), referensi ke **DOI buku**.
-- **Latihan:** prediksi stasiun lain (mis. Semarang/rob) & bandingkan.
-- **SEO:** "prediksi pasang surut LSTM", "pasang surut pontianak kapuas",
-  "prediksi banjir rob machine learning".
-- **Blog:** 3–4 artikel (konteks Kapuas; eksperimen; insight) + **video YouTube** (Fase II).
+  1. Konteks: banjir rob pesisir Indonesia (Jakarta/Semarang/Cilacap/Pontianak);
+     jenis pasang (semi-diurnal/diurnal/campuran); tipe pasut Indonesia.
+  2. **Pemilihan station:** Cilacap (GLOSS #291) sebagai contoh reproducible —
+     mengapa, keterbatasan untuk lokasi tanpa station terbuka.
+  3. **Sumber data terbuka:** IOC, UHSLC, PSMSL, BIG; tabel station Indonesia yang
+     datanya dapat diunduh; lisensi & atribusi.
+  4. Pipeline Bab 7: baseline persistence vs MLP vs LSTM/GRU; walk-forward 4 blok.
+  5. Evaluasi MAE/RMSE vs toleransi tinggi pasang; plot prediksi 1–7 hari;
+     diskusi batas model & keterbatasan data.
+  6. **Framing jujur:** analisis harmonik untuk penjelasan, ML untuk prakiraan
+     cepat & pengisian gap data — bukan klaim riset baru.
+- **Data & reproduksibilitas:**
+  - **Sample CSV** di-commit: `data/sample/cili_1y_hourly.csv` (1 tahun hourly
+    sintetik realistis untuk out-of-the-box notebook).
+  - **Skrip unduh** (`scripts/download_ioc.py`) untuk IOC real-time + UHSLC
+    ERDDAP + PSMSL metadata.
+  - Data riil hasil unduh masuk `data/raw/` (di-`.gitignore`); snapshot Zenodo
+    untuk DOI data kasus (rujuk `bookDOI`).
+- **Latihan:** prediksi station lain (mis. Ambon/Bitung via IOC); bandingkan
+  tipe pasang; simulasi gap; laporan 1 halaman.
+- **SEO:** "prediksi pasang surut LSTM", "pasang surut Cilacap GLOSS",
+  "pasang surut Indonesia machine learning", "banjir rob deep learning".
+- **Blog:** 3–4 artikel (konteks pasang surut Indonesia; eksperimen Cilacap;
+  insight keterbukaan data) + **video YouTube** (Fase II).
 
 ---
 
@@ -540,3 +559,9 @@ Setelah evaluasi lolos:
 - **Penyebab:** 10 iterasi review internal (audit struktur, learning-by-problem, framing tugas
   ML, evaluasi domain, adopsi pola code-first ala Bourke, data & reproduksibilitas, bobot &
   urutan kasus, sisi operasional, SEO & blog mapping, polish konsistensi).
+- **Revisi studi kasus pasang surut (Bab 8):** studi kasus awal "Pontianak/Kapuas" diganti
+  ke "Cilacap" (GLOSS #291, Indonesia) karena tidak ada tide gauge terbuka di Kalimantan.
+  Tambahan: tabel station Indonesia di sumber terbuka, skrip `download_ioc.py` (IOC + UHSLC +
+  PSMSL), sample CSV sintetik 1 tahun hourly untuk out-of-the-box notebook, dan keterbukaan
+  eksplisit tentang keterbatasan untuk lokasi tanpa station terbuka (strategi fallback ke
+  proksi terdekat atau model global FES2014/GOT4.10).

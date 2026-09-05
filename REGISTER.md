@@ -135,21 +135,28 @@
 | Kode | Kode 7.4 | LSTM multivariate | — | §7.7 |
 | Kode | Kode 7.5 | Plot forecast vs aktual | — | §7.8 |
 
-### Bab 8 — Studi Kasus: Pasang Surut Kapuas
+### Bab 8 — Studi Kasus: Pasang Surut Indonesia (Contoh Cilacap)
 
 | Jenis | Nomor | Caption / isi | File | Dirujuk di § |
 |---|---|---|---|---|
 | Gambar | Gambar 8.1 | Spektrum frekuensi pasang surut (M2/K1) | `figures/fig-8-1-spektrum-pasang.png` | §8.2 |
-| Gambar | Gambar 8.2 | Prediksi vs aktual 7 hari (ilustratif) | `figures/fig-8-2-forecast-7hari.png` | §8.5 |
+| Gambar | Gambar 8.2 | Prediksi vs aktual 7 hari (data sample Cilacap) | `figures/fig-8-2-forecast-7hari.png` | §8.5 |
+| Gambar | Gambar 8.3 | Residu per amplitudo dan fase pasang M2 | `figures/fig-8-3-residu.png` | §8.5 |
 | Tabel | Tabel 8.1 | Tipe pasang surut Indonesia | — | §8.2 |
 | Tabel | Tabel 8.2 | Harmonik vs machine learning | — | §8.2 |
-| Tabel | Tabel 8.3 | Ringkasan dataset pasang surut | — | §8.3 |
+| Tabel | Tabel 8.3 | Station Indonesia di sumber terbuka (IOC/UHSLC/PSMSL) | — | §8.3 |
+| Tabel | Tabel 8.3a | Ringkasan dataset Cilacap yang dibangun | — | §8.3 |
 | Tabel | Tabel 8.4 | Pilihan window (jam-an) | — | §8.4 |
 | Tabel | Tabel 8.5 | Contoh hasil MAE per horizon | — | §8.5 |
 | Tabel | Tabel 8.6 | Skill score relatif vs persistence | — | §8.5 |
-| Kode | Kode 8.1 | Setup & pemuatan data | — | §8.4 |
+| Persamaan | — (belum ada nomor eksplisit) | — | — | — |
+| Kode | Kode 8.1 | Setup & pemuatan data (sample/raw/sintetik) | — | §8.3 |
 | Kode | Kode 8.2 | Kerangka model MLP/LSTM/GRU | — | §8.4 |
 | Kode | Kode 8.3 | Simulasi pengisian gap | — | §8.6 |
+| Data | (sample) | Sample CSV Cilacap 1 tahun hourly sintetik | `data/sample/cili_1y_hourly.csv` | §8.3, Kode 8.1 |
+| Skrip | `scripts/download_ioc.py` | Unduh IOC/UHSLC/PSMSL | — | §8.3 |
+| Skrip | `scripts/generate_sample.py` | Hasilkan sample CSV | — | §8.3 |
+| Skrip | `scripts/generate_figures.py` | Hasilkan Gambar 8.2 & 8.3 dari sample | — | §8.5 |
 
 ### Bab 9 — Studi Kasus: Curah Hujan Stasiun BMKG
 
@@ -263,18 +270,20 @@
 | [6] | `sutskever2014seq2seq` | Artikel (NeurIPS) | arXiv:1409.3215 | ✅ |
 | [7] | `abadi2016tensorflow` | Software/arXiv | arXiv:1603.04467 | ✅ |
 
-### Bab 8 — Studi Kasus Pasang Surut Kapuas
+### Bab 8 — Studi Kasus Pasang Surut Indonesia (Contoh Cilacap)
 
 | `[n]` | Key `refs.bib` | Jenis | DOI / ISBN / arXiv | Status |
 |---|---|---|---|---|
 | [1] | `rob_kalbar` | Web (BIG) | URL tides.big.go.id | ✅ |
-| [2] | `big_tides` | Web (BIG) | URL tides.big.go.id | ✅ |
+| [2] | `ioc_sealevel` | Web (UNESCO/IOC) | URL ioc-sealevelmonitoring.org | ✅ |
 | [3] | `psmsl` | Web (PSMSL) | URL psmsl.org | ✅ |
-| [4] | `pugh2014sealevel` | Buku | (Cambridge Univ. Press) | ✅ |
-| [5] | `goodfellow2016deep` | Buku | (MIT Press) | ✅ |
-| [6] | `hyndman2021fpp3` | Buku (open) | otexts.com/fpp3 | ✅ |
-| [7] | `wmo2018verification` | Tech report (WMO) | (pdf WMO) | ✅ |
-| [8] | `abadi2016tensorflow` | Software/arXiv | arXiv:1603.04467 | ✅ |
+| [4] | `uhslc_rqds` | Web (UHSLC) | URL uhslc.soest.hawaii.edu/data/ | ✅ |
+| [5] | `pugh2014sealevel` | Buku | (Cambridge Univ. Press) | ✅ |
+| [6] | `goodfellow2016deep` | Buku | (MIT Press) | ✅ |
+| [7] | `hyndman2021fpp3` | Buku (open) | otexts.com/fpp3 | ✅ |
+| [8] | `wmo2018verification` | Tech report (WMO) | (pdf WMO) | ✅ |
+| [9] | `holgate2013psmsl` | Artikel (JCR) | 10.2112/JCOASTRES-D-12-00175.1 | ✅ |
+| [10] | `abadi2016tensorflow` | Software/arXiv | arXiv:1603.04467 | ✅ |
 
 ### Bab 9 — Studi Kasus Curah Hujan BMKG
 
