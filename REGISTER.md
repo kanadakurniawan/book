@@ -95,6 +95,46 @@
 | Kode | Kode 5.2 | Arsitektur + L2 + dropout | — | §5.3 |
 | Kode | Kode 5.3 | Walk-forward sederhana | — | §5.5 |
 
+### Bab 6 — Data Meteorologi: Sumber, Kualitas dan Persiapan
+
+| Jenis | Nomor | Caption / isi | File | Dirujuk di § |
+|---|---|---|---|---|
+| Gambar | Gambar 6.1 | Distribusi curah hujan harian (ekor panjang) | `figures/fig-6-1-distribusi-hujan.png` | §6.5 |
+| Tabel | Tabel 6.1 | Sumber data utama (BMKG, ERA5, CMIP6, PSMSL, satelit) | — | §6.2 |
+| Tabel | Tabel 6.2 | Perbandingan format berkas (CSV/NetCDF/GRIB) | — | §6.3 |
+| Persamaan | (6.1) | z-score normalisasi (train) | — | §6.7 |
+| Persamaan | (6.2) | transformasi target log1p | — | §6.7 |
+| Kode | Kode 6.1 | Membaca NetCDF dengan xarray | — | §6.3 |
+| Kode | Kode 6.2 | Membaca GRIB dengan cfgrib | — | §6.3 |
+| Kode | Kode 6.3 | Menyatukan ERA5 per jam → tabel harian | — | §6.3 |
+| Kode | Kode 6.4 | Cek & isi nilai hilang (pandas) | — | §6.4 |
+| Kode | Kode 6.5 | Dekomposisi musiman & korelasi silang | — | §6.5 |
+| Kode | Kode 6.6 | Fitur lag + musiman + ENSO/MJO | — | §6.6 |
+| Kode | Kode 6.7 | Normalisasi (skala train) + split waktu | — | §6.7 |
+| Kode | Kode 6.8 | Menyimpan X/y utk bab berikutnya | — | §6.7 |
+
+### Bab 7 — Deret Waktu dan Model Sekuensial: RNN, LSTM, GRU
+
+| Jenis | Nomor | Caption / isi | File | Dirujuk di § |
+|---|---|---|---|---|
+| Gambar | Gambar 7.1 | Ilustrasi RNN unrolled (state h) | `figures/fig-7-1-rnn-unrolled.png` | §7.4 |
+| Tabel | Tabel 7.1 | Contoh windowing (w=3, h=1) | — | §7.2 |
+| Tabel | Tabel 7.2 | Pilihan panjang window | — | §7.2 |
+| Tabel | Tabel 7.3 | Baseline deret waktu | — | §7.3 |
+| Tabel | Tabel 7.4 | LSTM vs GRU | — | §7.6 |
+| Tabel | Tabel 7.5 | Strategi multi-langkah | — | §7.7 |
+| Persamaan | (7.1) | input shape (batch, waktu, fitur) | — | §7.2 |
+| Persamaan | (7.2) | $h_t = \tanh(W_x x_t + W_h h_{t-1} + b)$ | — | §7.4 |
+| Persamaan | (7.3) | LSTM gate lupa $f_t$ | — | §7.5 |
+| Persamaan | (7.4) | LSTM gate masukan $i_t$ | — | §7.5 |
+| Persamaan | (7.5) | LSTM gate keluaran $o_t$ | — | §7.5 |
+| Persamaan | (7.6) | skill score SS | — | §7.8 |
+| Kode | Kode 7.1 | buat_window (window→X,y) | — | §7.2 |
+| Kode | Kode 7.2 | baseline persistence & klimatologi | — | §7.3 |
+| Kode | Kode 7.3 | LSTM univariate | — | §7.7 |
+| Kode | Kode 7.4 | LSTM multivariate | — | §7.7 |
+| Kode | Kode 7.5 | Plot forecast vs aktual | — | §7.8 |
+
 ---
 
 ## Bagian B — Register Sitasi
@@ -152,6 +192,33 @@
 | [2] | `goodfellow2016deep` | Buku | (MIT Press) | ✅ |
 | [3] | `srivastava2014dropout` | Artikel (JMLR) | (JMLR) | ✅ |
 | [4] | `gupta2009decomposition` | Artikel (J. Hydrol) | 10.1016/j.jhydrol.2009.08.003 | ✅ |
+
+### Bab 6 — Data Meteorologi
+
+| `[n]` | Key `refs.bib` | Jenis | DOI / ISBN / arXiv | Status |
+|---|---|---|---|---|
+| [1] | `bmkg_dataonline` | Web (BMKG) | URL dataonline.bmkg.go.id | ✅ |
+| [2] | `c3s_era5` | Web (C3S) | URL cds.climate.copernicus.eu | ✅ |
+| [3] | `hersbach2020era5` | Artikel | 10.1002/qj.3803 | ✅ |
+| [4] | `psmsl` | Web (PSMSL) | URL psmsl.org | ✅ |
+| [5] | `big_tides` | Web (BIG) | URL tides.big.go.id | ✅ |
+| [6] | `funk2015chirps` | Artikel (Sci Data) | 10.1038/sdata.2015.66 | ✅ |
+| [7] | `wolter1998mei` | Prosiding | (17th Climate Diagnostics) | ✅ |
+| [8] | `wheeler2004rmm` | Artikel | 10.1175/1520-0493(2004)132<1917:AARMMI>2.0.CO;2 | ✅ |
+| [9] | `goodfellow2016deep` | Buku | (MIT Press) | ✅ |
+| [10] | `jolliffe2011forecast` | Buku | 10.1002/9781119960003 | ✅ |
+
+### Bab 7 — Deret Waktu dan Model Sekuensial
+
+| `[n]` | Key `refs.bib` | Jenis | DOI / ISBN / arXiv | Status |
+|---|---|---|---|---|
+| [1] | `goodfellow2016deep` | Buku | (MIT Press) | ✅ |
+| [2] | `hyndman2021fpp3` | Buku (open) | otexts.com/fpp3 | ✅ |
+| [3] | `elman1990finding` | Artikel | 10.1207/s15516709cog1402_1 | ✅ |
+| [4] | `hochreiter1997lstm` | Artikel | 10.1162/neco.1997.9.8.1735 | ✅ |
+| [5] | `cho2014gru` | Artikel (arXiv) | arXiv:1406.1078 | ✅ |
+| [6] | `sutskever2014seq2seq` | Artikel (NeurIPS) | arXiv:1409.3215 | ✅ |
+| [7] | `abadi2016tensorflow` | Software/arXiv | arXiv:1603.04467 | ✅ |
 
 ---
 
