@@ -69,8 +69,7 @@ dan *machine learning* (pembelajaran mesin).
 
 *Machine learning* (ML) adalah cabang AI yang membuat komputer belajar pola dari data
 tanpa diprogram secara eksplisit untuk setiap aturan [2]. Alih-alih menulis aturan manual
-seperti "jika hujan kemarin dan kelembapan tinggi, maka besok hujan", kita memberi model
-ribuan contoh dan membiarkannya **menemukan sendiri** pola yang berguna, misalnya,
+seperti "jika hari ini hujan dan kelembapan tinggi, maka besok akan hujan", kita memberi model ribuan contoh dan membiarkannya **menemukan sendiri** pola yang berguna, misalnya,
 variabel mana yang paling berpengaruh terhadap hujan. Contoh sederhana: jika kita memberi
 model data riwayat hujan, suhu, dan kelembapan selama bertahun-tahun, model dapat
 menemukan kombinasi yang paling menjelaskan kapan hujan turun dan kapan tidak. Proses
@@ -87,8 +86,7 @@ semakin abstrak [4].
 
 ![Gambar 1.1: Keterkaitan artificial intelligence, machine learning, dan deep learning](figures/fig-1-1-hierarki-ai-by-chatgpt.png)
 
-**Gambar 1.1**: AI sebagai payung terluas, dengan ML sebagai cabangnya yang belajar
-dari data, dan DL sebagai bagian ML yang memakai jaringan saraf berlapis.
+**Gambar 1.1**: Keterkaitan artificial intelligence, machine learning, dan deep learning.
 
 Sebagaimana dilihat pada Gambar 1.1, *artificial intelligence* adalah payung terluas,
 *machine learning* adalah cabangnya yang belajar dari data, dan *deep learning* adalah
